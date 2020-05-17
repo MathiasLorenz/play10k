@@ -11,7 +11,7 @@ namespace Play10K.Base
         public int Count { get; private set; } = 0;
         public int Score { get => ScoreCalculator.CalculateScore(this); }
 
-        public ValueDice(int value, int count, bool isWithMultiplier)
+        public ValueDice(int value, int count)
         {
             if (count > 6 || count < 1)
             {
