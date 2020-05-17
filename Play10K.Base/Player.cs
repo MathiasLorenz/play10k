@@ -8,6 +8,7 @@ namespace Play10K.Base
     {
         public string Name { get; }
         public int Score { get; } = 0;
+        
 
         public Player(string name)
         {
@@ -16,6 +17,10 @@ namespace Play10K.Base
 
         public void PlayTurn()
         {
+            var dice = new List<int>(6);
+            var turnScore = 0;
+            var savedDice = new DiceCollection();
+
             return;
         }
     }
