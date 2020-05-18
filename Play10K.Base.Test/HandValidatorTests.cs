@@ -62,7 +62,7 @@ namespace Play10K.Base.Test
         public void TestAnyValidCombinationWithCollected1()
         {
             var hand = new List<int> { 2 };
-            var lastCollected = new ValueDice(2, 3);
+            var lastCollected = new DiceCollection(2, 3);
             var result = HandValidator.AnyValidDiceCombination(hand, lastCollected);
             var expected = true;
 
@@ -73,7 +73,7 @@ namespace Play10K.Base.Test
         public void TestAnyValidCombinationWithCollected2()
         {
             var hand = new List<int> { 3 };
-            var lastCollected = new ValueDice(2, 3);
+            var lastCollected = new DiceCollection(2, 3);
             var result = HandValidator.AnyValidDiceCombination(hand, lastCollected);
             var expected = false;
 
@@ -84,7 +84,7 @@ namespace Play10K.Base.Test
         public void TestAnyValidCombinationWithCollected3()
         {
             var hand = new List<int> { 3 };
-            var lastCollected = new ValueDice(1, 1);
+            var lastCollected = new DiceCollection(1, 1);
             var result = HandValidator.AnyValidDiceCombination(hand, lastCollected);
             var expected = false;
 
@@ -95,7 +95,7 @@ namespace Play10K.Base.Test
         public void TestAnyValidCombinationWithCollected4()
         {
             var hand = new List<int> { 1 };
-            var lastCollected = new ValueDice(3, 4);
+            var lastCollected = new DiceCollection(3, 4);
             var result = HandValidator.AnyValidDiceCombination(hand, lastCollected);
             var expected = true;
 
@@ -106,7 +106,7 @@ namespace Play10K.Base.Test
         public void TestAnyValidCombinationWithCollected5()
         {
             var hand = new List<int> { 3 };
-            var lastCollected = (ValueDice)null;
+            var lastCollected = (DiceCollection)null;
             var result = HandValidator.AnyValidDiceCombination(hand, lastCollected);
             var expected = false;
 
@@ -116,7 +116,7 @@ namespace Play10K.Base.Test
         public void TestAnyValidCombinationWithCollected6()
         {
             var hand = new List<int> { 1 };
-            var lastCollected = (ValueDice)null;
+            var lastCollected = (DiceCollection)null;
             var result = HandValidator.AnyValidDiceCombination(hand, lastCollected);
             var expected = true;
 

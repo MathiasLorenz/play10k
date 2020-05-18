@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Play10K.Base.Extensions
+namespace Play10K.Base.CollectionExtensions
 {
     public static class IEnumerableExtensions
     {
@@ -31,6 +32,18 @@ namespace Play10K.Base.Extensions
             }
 
             return dict;
+        }
+
+        /// <summary>
+        /// Returns boolean describing if the array consists of only the same element.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        // Todo: Unit test
+        public static bool AllElementsEqual<T>(this IEnumerable<T> items)
+        {
+            return items.Distinct().Take(2).Count() == 1;
         }
     }
 }

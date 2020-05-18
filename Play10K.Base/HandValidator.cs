@@ -1,4 +1,4 @@
-﻿using Play10K.Base.Extensions;
+﻿using Play10K.Base.CollectionExtensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace Play10K.Base
             return AnyValidDiceCombination(dice, null);
         }
 
-        public static bool AnyValidDiceCombination(List<int> dice, ValueDice? lastCollected)
+        public static bool AnyValidDiceCombination(List<int> dice, DiceCollection? lastCollected)
         {
             if (dice.Count == 0)
             {
@@ -50,12 +50,6 @@ namespace Play10K.Base
                     }
                 }
             }
-        }
-
-        public static bool SelectedDiceAreValid(List<int> dice, ValueDice lastCollected)
-        {
-
-            return false;
         }
     }
 }

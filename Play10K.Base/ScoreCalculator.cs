@@ -6,7 +6,7 @@ namespace Play10K.Base
 {
     internal static class ScoreCalculator
     {
-        public static int CalculateScore(ValueDice input)
+        public static int CalculateScore(DiceCollection input)
         {
             return 2;
         }

@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Play10K.Base.Extensions;
+using Play10K.Base.CollectionExtensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

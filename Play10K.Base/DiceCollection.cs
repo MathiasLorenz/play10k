@@ -1,27 +1,44 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Play10K.Base
 {
     internal class DiceCollection
     {
-        public Stack<ValueDice> collectedDice { get; } = new Stack<ValueDice>();
-        public int Score { get => collectedDice.Sum(x => x.Score); }
+        public int Value { get; } = 0;
+        public int Count { get; private set; } = 0;
+        public int Score { get => ScoreCalculator.CalculateScore(this); }
 
-        /// <summary>
-        /// Tries to add the specified dice in dice to collected dice, i.e. the ones we have already counted in our points.
-        /// All validation is done in this step.
-        /// </summary>
-        /// <param name="dice"></param>
-        public bool Add(List<int> dice)
+        public DiceCollection(int value, int count)
         {
-            if (HandValidator.SelectedDiceAreValid(dice, collectedDice.Peek()))
+            if (value > 6 || value < 1)
             {
-                return true;
+                throw new ArgumentException(message: "Dice value cannot be less than 1 or larger than 6", paramName: "value");
             }
-            else
+            EnsureCountIsValid(count);
+
+            Count = count;
+            Value = value;
+        }
+
+        public void AddToCount(int countToAdd)
+        {
+            EnsureCountIsValid(Count + countToAdd);
+            Count += countToAdd;
+        }
+
+        private void EnsureCountIsValid(int count)
+        {
+            if (count > 6 || count < 1)
             {
-                return false;
+                throw new ArgumentException(message: "Cannot add more than 6 or less than 1 dice.", paramName: "count");
+            }
+            if (count == 2)
+            {
+                throw new ArgumentException("The count for a DiceCollection can never be two.");
             }
         }
     }

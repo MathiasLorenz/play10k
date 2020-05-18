@@ -6,9 +6,9 @@ namespace Play10K.Base
 {
     public class Player
     {
+        private readonly Random _rand = new Random();
         public string Name { get; }
         public int Score { get; } = 0;
-        
 
         public Player(string name)
         {
@@ -17,9 +17,9 @@ namespace Play10K.Base
 
         public void PlayTurn()
         {
-            var dice = new List<int>(6);
-            var turnScore = 0;
-            var savedDice = new DiceCollection();
+            //var hand = new List<int>(6);
+            //var turnScore = 0;
+            //var savedDice = new CollectedDice();
 
             return;
         }
