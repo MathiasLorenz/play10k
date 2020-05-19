@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Play10K.Base.Test.Extensions
+namespace Play10K.Base.Test.CollectionExtensions.IEnumerableExtensions
 {
     [TestClass]
-    public class IEnumerableExtensionsTests
+    public class DictionaryCounterTests
     {
         [TestMethod]
         public void TestEmptyList()
