@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("Play10K.Base.Test")]
 namespace Play10K.Base
 {
     internal class CollectedDice
@@ -21,7 +23,7 @@ namespace Play10K.Base
             DiceCollection? lastCollected = _collectedDice.LastOrDefault();
             if (dice.Count <= 0 || dice.Count > 6)
             {
-                return false;
+                throw new ArgumentException("Number of dice outside legal range [0, 6]");
             }
             else if (dice.Count == 1)
             {
