@@ -24,10 +24,16 @@ namespace Play10K.Base
             Value = value;
         }
 
-        public void AddToCount(int countToAdd)
+        public int AddToCount(int countToAdd)
         {
+            if (Count == 1)
+            {
+                throw new ArgumentException("Can never add to DiceCollection with Count 1.");
+            }
+
             EnsureCountIsValid(Count + countToAdd);
             Count += countToAdd;
+            return Count;
         }
 
         private void EnsureCountIsValid(int count)
