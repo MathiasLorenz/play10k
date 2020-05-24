@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Play10K.Base.Test
@@ -30,10 +31,11 @@ namespace Play10K.Base.Test
         public void SaveDice_SingleHand_ReturnsTrue(int[] toCollect, int expectedScore)
         {
             var collectedDice = new CollectedDice();
-            var result = collectedDice.SaveDice(toCollect);
+            var result = collectedDice.CollectAndVerifyDice(toCollect);
             var expectedCollect = true;
 
             Assert.AreEqual(expectedCollect, result);
+            collectedDice.SaveCollectedDice();
             Assert.AreEqual(expectedScore, collectedDice.Score);
         }
 
@@ -56,7 +58,7 @@ namespace Play10K.Base.Test
         public void SaveDice_SingleHand_ReturnsFalse(int[] toCollect)
         {
             var collectedDice = new CollectedDice();
-            var result = collectedDice.SaveDice(toCollect);
+            var result = collectedDice.CollectAndVerifyDice(toCollect);
             var expected = false;
 
             Assert.AreEqual(expected, result);
@@ -66,27 +68,27 @@ namespace Play10K.Base.Test
         public void SaveDice_MultipleHands()
         {
             var collectedDice = new CollectedDice();
-            var result = collectedDice.SaveDice(new int[] { 3, 3, 3 });
+            var result = collectedDice.CollectAndVerifyDice(new int[] { 3, 3, 3 });
             var expected = true;
             Assert.AreEqual(expected, result);
 
-            result = collectedDice.SaveDice(new int[] { 4 });
+            result = collectedDice.CollectAndVerifyDice(new int[] { 4 });
             expected = false;
             Assert.AreEqual(expected, result);
 
-            result = collectedDice.SaveDice(new int[] { 3 });
+            result = collectedDice.CollectAndVerifyDice(new int[] { 3 });
             expected = true;
             Assert.AreEqual(expected, result);
 
-            result = collectedDice.SaveDice(new int[] { 1 });
+            result = collectedDice.CollectAndVerifyDice(new int[] { 1 });
             expected = true;
             Assert.AreEqual(expected, result);
 
-            result = collectedDice.SaveDice(new int[] { 3 });
+            result = collectedDice.CollectAndVerifyDice(new int[] { 3 });
             expected = false;
             Assert.AreEqual(expected, result);
 
-            result = collectedDice.SaveDice(new int[] { 5 });
+            result = collectedDice.CollectAndVerifyDice(new int[] { 5 });
             expected = true;
             Assert.AreEqual(expected, result);
 

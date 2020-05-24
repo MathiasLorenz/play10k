@@ -10,53 +10,88 @@ namespace Play10K.Base
 {
     internal static class HandValidator
     {
-        public static bool IsAnyDiceCombinationValid(ICollection<int> dice)
+        public static bool TryValidateAnyDice(ICollection<int> dice)
         {
-            return IsAnyDiceCombinationValid(dice, null);
+            return InternalTryValidate(dice, null, false, out var _);
         }
 
-        public static bool IsAnyDiceCombinationValid(ICollection<int> dice, DiceCollection? lastCollected)
+        public static bool TryValidateAnyDice(ICollection<int> dice, DiceCollection? lastCollected)
         {
-            if (dice.Count == 0)
-            {
-                throw new ArgumentException("List of dice cannot be empty.");
-            }
-            else if (dice.Count > 6)
-            {
-                throw new ArgumentException("Cannot check for more than six dice.");
-            }
-            else if (dice.Any(x => x < 1) || dice.Any(x => x > 6))
-            {
-                throw new ArgumentException("Dice value has to be in range [1, 6]");
-            }
+            return InternalTryValidate(dice, lastCollected, false, out var _);
+        }
 
-            var counter = dice.DictionaryCounter();
+        public static bool TryValidateAnyDice(ICollection<int> dice, out Dictionary<int, int>? diceCounter)
+        {
+            return InternalTryValidate(dice, null, false, out diceCounter);
+        }
 
-            if (counter.TryGetValue(1, out var _) || counter.TryGetValue(5, out var _))
+        public static bool TryValidateAnyDice(ICollection<int> dice, DiceCollection? lastCollected, out Dictionary<int, int>? diceCounter)
+        {
+            return InternalTryValidate(dice, lastCollected, false, out diceCounter);
+        }
+
+        // Todo: Unit test
+        public static bool TryValidateAllDice(ICollection<int> dice)
+        {
+            return InternalTryValidate(dice, null, true, out var _);
+        }
+
+        // Todo: Unit test
+        public static bool TryValidateAllDice(ICollection<int> dice, DiceCollection? lastCollected)
+        {
+            return InternalTryValidate(dice, lastCollected, true, out var _);
+        }
+
+        public static bool TryValidateAllDice(ICollection<int> dice, out Dictionary<int, int>? diceCounter)
+        {
+            return InternalTryValidate(dice, null, true, out diceCounter);
+        }
+
+        public static bool TryValidateAllDice(ICollection<int> dice, DiceCollection? lastCollected, out Dictionary<int, int>? diceCounter)
+        {
+            return InternalTryValidate(dice, lastCollected, true, out diceCounter);
+        }
+
+        private static bool InternalTryValidate(ICollection<int> dice, DiceCollection? lastCollected, bool validateAll, out Dictionary<int, int>? diceCounter)
+        {
+            if (dice.Count == 0 || dice.Count > 6)
+            {
+                throw new ArgumentException("Overall dice count cannot be less than one or more than six.");
+            }
+            diceCounter = dice.DictionaryCounter();
+            var successes = diceCounter.Select(x => InternalTryValidateDiceCount(x.Key, x.Value, lastCollected));
+            var result = validateAll ? successes.Any(x => x == false) : successes.Any(x => x == true);
+
+            if (result == false)
+            {
+                diceCounter = null;
+            }
+            return result;
+        }
+
+        private static bool InternalTryValidateDiceCount(int value, int count, DiceCollection? lastCollected)
+        {
+            if (count <= 0 || count > 6)
+            {
+                throw new ArgumentException("You cannot save less than 1 or more than six dice.");
+            }
+            else if (count >= 3)
             {
                 return true;
             }
-            else if (counter.Any(x => x.Value >= 3))
+
+            if (value <= 0 || value > 6)
+            {
+                throw new ArgumentException("Dice value is invalid, has to be [1, 6]");
+            }
+            else if (value == 1 || value == 5)
             {
                 return true;
             }
-            else
+            else // value = { 2, 3, 4, 6 }
             {
-                if (lastCollected == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    if (counter.Any(x => x.Key == lastCollected.Value))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
+                // lastCollected can only have a value in { 2, 3, 4, 6 } if the corresponding count is >= 3, so this is fine.
+                return value == lastCollected?.Value;
             }
         }
     }

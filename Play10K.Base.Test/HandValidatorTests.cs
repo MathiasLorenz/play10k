@@ -14,7 +14,7 @@ namespace Play10K.Base.Test
         public void IsAnyDiceCombinationValid_SingleValue_ReturnsTrue(int input)
         {
             var hand = new List<int> { input };
-            var result = HandValidator.IsAnyDiceCombinationValid(hand);
+            var result = HandValidator.TryValidateAnyDice(hand);
             var expected = true;
 
             Assert.AreEqual(expected, result);
@@ -28,7 +28,7 @@ namespace Play10K.Base.Test
         public void IsAnyDiceCombinationValid_SingleValue_ReturnsFalse(int input)
         {
             var hand = new List<int> { input };
-            var result = HandValidator.IsAnyDiceCombinationValid(hand);
+            var result = HandValidator.TryValidateAnyDice(hand);
             var expected = false;
 
             Assert.AreEqual(expected, result);
@@ -42,7 +42,7 @@ namespace Play10K.Base.Test
         public void IsAnyDiceCombinationValid_SingleValue_ThrowsException(int input)
         {
             var hand = new List<int> { input };
-            HandValidator.IsAnyDiceCombinationValid(hand);
+            HandValidator.TryValidateAnyDice(hand);
         }
 
         [TestMethod]
@@ -53,7 +53,7 @@ namespace Play10K.Base.Test
         [DataRow(new int[] { 2, 4, 4, 4 })]
         public void IsAnyDiceCombinationValid_MultipleValues_ReturnsTrue(int[] input)
         {
-            var result = HandValidator.IsAnyDiceCombinationValid(input);
+            var result = HandValidator.TryValidateAnyDice(input);
             var expected = true;
 
             Assert.AreEqual(expected, result);
@@ -65,7 +65,7 @@ namespace Play10K.Base.Test
         [DataRow(new int[] { 2, 3, 3, 4, 4, 6 })]
         public void IsAnyDiceCombinationValid_MultipleValues_ReturnsFalse(int[] input)
         {
-            var result = HandValidator.IsAnyDiceCombinationValid(input);
+            var result = HandValidator.TryValidateAnyDice(input);
             var expected = false;
 
             Assert.AreEqual(expected, result);
@@ -79,7 +79,7 @@ namespace Play10K.Base.Test
         [DataRow(new int[] { 2, 8 })]
         public void IsAnyDiceCombinationValid_MultipleValues_ThrowsException(int[] input)
         {
-            HandValidator.IsAnyDiceCombinationValid(input);
+            HandValidator.TryValidateAnyDice(input);
         }
 
         [TestMethod]
@@ -95,7 +95,7 @@ namespace Play10K.Base.Test
         public void IsAnyDiceCombinationValid_SinglevalueWithCollected(int[] hand, int[]? diceCollection, bool expected)
         {
             var lastCollected = diceCollection != null ? new DiceCollection(diceCollection[0], diceCollection[1]) : null;
-            var result = HandValidator.IsAnyDiceCombinationValid(hand, lastCollected);
+            var result = HandValidator.TryValidateAnyDice(hand, lastCollected);
 
             Assert.AreEqual(expected, result);
         }
