@@ -59,8 +59,8 @@ namespace Play10K.Base
                 throw new ArgumentException("Overall dice count cannot be less than one or more than six.");
             }
             diceCounter = dice.DictionaryCounter();
-            var successes = diceCounter.Select(x => InternalTryValidateDiceCount(x.Key, x.Value, lastCollected));
-            var result = validateAll ? successes.Any(x => x == false) : successes.Any(x => x == true);
+            var successes = diceCounter.Select(x => InternalTryValidateDiceCounter(x.Key, x.Value, lastCollected));
+            var result = validateAll ? successes.All(x => x == true) : successes.Any(x => x == true);
 
             if (result == false)
             {
@@ -69,7 +69,7 @@ namespace Play10K.Base
             return result;
         }
 
-        private static bool InternalTryValidateDiceCount(int value, int count, DiceCollection? lastCollected)
+        private static bool InternalTryValidateDiceCounter(int value, int count, DiceCollection? lastCollected)
         {
             if (count <= 0 || count > 6)
             {

@@ -21,7 +21,7 @@ namespace Play10K.Base.CollectionExtensions
 
             foreach(var elem in source)
             {
-                if (dict.TryGetValue(elem, out var value))
+                if (dict.TryGetValue(elem, out var _))
                 {
                     dict[elem] += 1;
                 }
@@ -40,7 +40,6 @@ namespace Play10K.Base.CollectionExtensions
         /// <typeparam name="T"></typeparam>
         /// <param name="items"></param>
         /// <returns></returns>
-        // Todo: Unit test
         public static bool AllElementsEqual<T>(this IEnumerable<T> items)
         {
             return items.Distinct().Take(2).Count() == 1;
