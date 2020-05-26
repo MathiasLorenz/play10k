@@ -32,7 +32,6 @@ namespace Play10K.Base.Test
         [DataRow(new int[] { 1, 1, 1, 1, 5, 5 }, 2100)]
         [DataRow(new int[] { 6, 6, 6, 1, 5, 5 }, 800)]
         [DataRow(new int[] { 6, 6, 6, 5 }, 650)]
-        // Todo: Fix name
         public void SaveCollected_SingleHand_CalculatesCorrectScore(int[] toCollect, int expectedScore)
         {
             var collectedDice = new CollectedDice();
