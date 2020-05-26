@@ -24,53 +24,35 @@ namespace Play10K.Base.Test
         [DataRow(new int[] { 1, 1, 5 }, 250)]
         [DataRow(new int[] { 5, 5, 1 }, 200)]
         [DataRow(new int[] { 1, 5, 1 }, 250)]
-        [DataRow(new int[] { 1, 5, 1, 1 }, 350)]
-        [DataRow(new int[] { 1, 5, 1, 1, 1 }, 450)]
-        [DataRow(new int[] { 1, 5, 1, 1, 1 }, 450)]
-        [DataRow(new int[] { 1, 5, 1, 1, 1, 1 }, 550)]
-        public void SaveDice_SingleHand_ReturnsTrue(int[] toCollect, int expectedScore)
+        [DataRow(new int[] { 1, 5, 1, 1 }, 1050)]
+        [DataRow(new int[] { 1, 5, 1, 1, 1 }, 2050)]
+        [DataRow(new int[] { 1, 5, 1, 1, 1, 1 }, 4050)]
+        [DataRow(new int[] { 1, 1, 1, 5, 5, 5 }, 1500)]
+        [DataRow(new int[] { 1, 1, 1, 5, 5 }, 1100)]
+        [DataRow(new int[] { 1, 1, 1, 1, 5, 5 }, 2100)]
+        [DataRow(new int[] { 6, 6, 6, 1, 5, 5 }, 800)]
+        [DataRow(new int[] { 6, 6, 6, 5 }, 650)]
+        // Todo: Fix name
+        public void SaveCollected_SingleHand_CalculatesCorrectScore(int[] toCollect, int expectedScore)
         {
             var collectedDice = new CollectedDice();
             var result = collectedDice.CollectAndVerifyDice(toCollect);
             var expectedCollect = true;
-
             Assert.AreEqual(expectedCollect, result);
-            collectedDice.SaveCollectedDice();
+            
+            collectedDice.SaveCollected();
             Assert.AreEqual(expectedScore, collectedDice.Score);
         }
 
         [TestMethod]
-        [DataRow(new int[] { 2 })]
-        [DataRow(new int[] { 3 })]
-        [DataRow(new int[] { 4 })]
-        [DataRow(new int[] { 6 })]
-        [DataRow(new int[] { 3, 3 })]
-        [DataRow(new int[] { 4, 4 })]
-        [DataRow(new int[] { 1, 4 })]
-        [DataRow(new int[] { 5, 6 })]
-        [DataRow(new int[] { 1, 2, 5 })]
-        [DataRow(new int[] { 5, 3, 5 })]
-        [DataRow(new int[] { 3, 3, 5 })]
-        [DataRow(new int[] { 6, 6, 6, 2 })]
-        [DataRow(new int[] { 1, 1, 6, 5 })]
-        [DataRow(new int[] { 1, 1, 5, 5, 5 })]
-        [DataRow(new int[] { 1, 1, 5, 3, 2, 1 })]
-        public void SaveDice_SingleHand_ReturnsFalse(int[] toCollect)
-        {
-            var collectedDice = new CollectedDice();
-            var result = collectedDice.CollectAndVerifyDice(toCollect);
-            var expected = false;
-
-            Assert.AreEqual(expected, result);
-        }
-
-        [TestMethod]
-        public void SaveDice_MultipleHands()
+        public void CollectAndVerifyDice_Then_SaveCollected_MultipleHands()
         {
             var collectedDice = new CollectedDice();
             var result = collectedDice.CollectAndVerifyDice(new int[] { 3, 3, 3 });
             var expected = true;
             Assert.AreEqual(expected, result);
+            collectedDice.SaveCollected();
+            Assert.AreEqual(300, collectedDice.Score);
 
             result = collectedDice.CollectAndVerifyDice(new int[] { 4 });
             expected = false;
@@ -79,10 +61,14 @@ namespace Play10K.Base.Test
             result = collectedDice.CollectAndVerifyDice(new int[] { 3 });
             expected = true;
             Assert.AreEqual(expected, result);
+            collectedDice.SaveCollected();
+            Assert.AreEqual(600, collectedDice.Score);
 
             result = collectedDice.CollectAndVerifyDice(new int[] { 1 });
             expected = true;
             Assert.AreEqual(expected, result);
+            collectedDice.SaveCollected();
+            Assert.AreEqual(700, collectedDice.Score);
 
             result = collectedDice.CollectAndVerifyDice(new int[] { 3 });
             expected = false;
@@ -91,9 +77,8 @@ namespace Play10K.Base.Test
             result = collectedDice.CollectAndVerifyDice(new int[] { 5 });
             expected = true;
             Assert.AreEqual(expected, result);
-
-            var score = 750;
-            Assert.AreEqual(score, collectedDice.Score);
+            collectedDice.SaveCollected();
+            Assert.AreEqual(750, collectedDice.Score);
         }
     }
 }

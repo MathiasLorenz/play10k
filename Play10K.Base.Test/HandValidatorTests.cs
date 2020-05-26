@@ -125,12 +125,21 @@ namespace Play10K.Base.Test
         }
 
         [TestMethod]
-        [DataRow(new int[] { 2, 3 })]
+        [DataRow(new int[] { 2 })]
         [DataRow(new int[] { 3 })]
-        [DataRow(new int[] { 1, 3 })]
-        [DataRow(new int[] { 1, 1, 1, 5, 4 })]
-        [DataRow(new int[] { 1, 1, 1, 1, 1, 2 })]
-        [DataRow(new int[] { 5, 1, 2 })]
+        [DataRow(new int[] { 4 })]
+        [DataRow(new int[] { 6 })]
+        [DataRow(new int[] { 3, 3 })]
+        [DataRow(new int[] { 4, 4 })]
+        [DataRow(new int[] { 1, 4 })]
+        [DataRow(new int[] { 5, 6 })]
+        [DataRow(new int[] { 1, 2, 5 })]
+        [DataRow(new int[] { 5, 3, 5 })]
+        [DataRow(new int[] { 3, 3, 5 })]
+        [DataRow(new int[] { 6, 6, 6, 2 })]
+        [DataRow(new int[] { 1, 1, 6, 5 })]
+        [DataRow(new int[] { 1, 1, 5, 2, 5 })]
+        [DataRow(new int[] { 1, 1, 5, 3, 2, 1 })]
         public void TryValidateAllDice_SingleAndMultipleValuesNoCollected_ReturnsFalse(int[] input)
         {
             var result = HandValidator.TryValidateAllDice(input);
