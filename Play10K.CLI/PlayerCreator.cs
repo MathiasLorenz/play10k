@@ -21,7 +21,7 @@ namespace Play10K.CLI
                 Console.WriteLine("Do you wanna add more players? Type: y/n");
                 while (true)
                 {
-                    var response = Console.ReadLine();
+                    var response = Console.ReadLine().Trim();
                     if (response == "Y" || response == "y")
                     {
                         break;

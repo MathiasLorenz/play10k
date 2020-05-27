@@ -13,6 +13,7 @@ namespace Play10K.Base
         public Dictionary<int, int>? DiceCollectedThisHand { get; private set; } = null;
         public int Score { get => AllCollectedDice.Sum(x => x.Score); }
 
+        // Todo: I should probably consider doing this in two steps, one for verifying and one for collecting...
         public bool CollectAndVerifyDice(ICollection<int> dice)
         {
             if (DiceCollectedThisHand != null)
@@ -29,6 +30,16 @@ namespace Play10K.Base
                 DiceCollectedThisHand = diceCounter;
             }
             return result;
+        }
+
+        // Todo: Unit test and add to larger tests of all functionality
+        public void DiscardLastCollected()
+        {
+            if (DiceCollectedThisHand == null)
+            {
+                throw new ArgumentNullException("No last collected to discard.");
+            }
+            DiceCollectedThisHand = null;
         }
 
         // Save to dice collected this hand to AllCollectedDice.
