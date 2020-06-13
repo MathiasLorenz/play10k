@@ -9,12 +9,32 @@ namespace Play10K.Base
 {
     internal class CollectedDice
     {
+        private readonly HandValidator _handValidator = new HandValidator();
         public List<DiceCollection> AllCollectedDice { get; private set; } = new List<DiceCollection>();
+        public DiceCollection? LastCollected => AllCollectedDice.LastOrDefault();
         public Dictionary<int, int>? DiceCollectedThisHand { get; private set; } = null;
         public int Score { get => AllCollectedDice.Sum(x => x.Score); }
 
         // Todo: I should probably consider doing this in two steps, one for verifying and one for collecting...
-        public bool CollectAndVerifyDice(ICollection<int> dice)
+        //public bool CollectAndVerifyDice(ICollection<int> dice)
+        //{
+        //    if (DiceCollectedThisHand != null)
+        //    {
+        //        // Consider the ability to add to this already collected hand. Maybe keep record of hands put into this class?
+        //        // Or make a converter from DiceCollection -> ICollection<int>, so that the extra dice can be added and recalculated.
+        //        throw new ArgumentException("You already have dice collected for this hand. You either need to discard these or save before rolling and collecting again.");
+        //    }
+
+        //    var result = _handValidator.TryValidateAllDice(dice, LastCollected, out var diceCounter);
+        //    if (result)
+        //    {
+        //        DiceCollectedThisHand = diceCounter;
+        //    }
+        //    return result;
+        //}
+
+        // Verifies that the selected list of dice to collect is valid.
+        public bool VerifyDiceToCollect(ICollection<int> dice)
         {
             if (DiceCollectedThisHand != null)
             {
@@ -22,14 +42,19 @@ namespace Play10K.Base
                 // Or make a converter from DiceCollection -> ICollection<int>, so that the extra dice can be added and recalculated.
                 throw new ArgumentException("You already have dice collected for this hand. You either need to discard these or save before rolling and collecting again.");
             }
+            return _handValidator.TryValidateAllDice(dice, LastCollected);
+        }
 
-            var lastCollected = AllCollectedDice.LastOrDefault();
-            var result = HandValidator.TryValidateAllDice(dice, lastCollected, out var diceCounter);
-            if (result)
+        // Collects the specified dice into DiceCollectedThisHand.
+        public void CollectDice(ICollection<int> dice)
+        {
+            var validation = _handValidator.TryValidateAllDice(dice, LastCollected, out var diceCounter);
+            if (validation == false)
             {
-                DiceCollectedThisHand = diceCounter;
+                throw new InvalidOperationException("Dice should already be validated here, the dice have been changed, which should not be possible.");
             }
-            return result;
+
+            DiceCollectedThisHand = diceCounter;
         }
 
         // Todo: Unit test and add to larger tests of all functionality
@@ -42,7 +67,7 @@ namespace Play10K.Base
             DiceCollectedThisHand = null;
         }
 
-        // Save to dice collected this hand to AllCollectedDice.
+        // Save dice collected this hand (DiceCollectedThisHand) to AllCollectedDice.
         // The hand is already validated, so we don't have to do this again.
         public void SaveCollected()
         {
