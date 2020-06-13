@@ -1,13 +1,15 @@
 ﻿using Play10K.Base;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Play10K.CLI
 {
-    public static class PlayerCreator
+    public class PlayerCreator
     {
-        public static List<Player> Create()
+        private readonly ResponseRequester _responseRequester = new ResponseRequester();
+        public List<Player> Create()
         {
             List<Player> players = new List<Player>();
             bool createAnotherPlayer = true;
@@ -16,27 +18,19 @@ namespace Play10K.CLI
             {
                 Console.WriteLine("Giver your player a name: ");
                 var playerName = Console.ReadLine();
+                if (players.Any(x => String.Equals(x.Name, playerName, StringComparison.InvariantCultureIgnoreCase)))
+                {
+                    Console.WriteLine("A player already has this name, so you need to choose another!");
+                    continue;
+                }
                 players.Add(new Player(playerName));
 
                 Console.WriteLine("Do you wanna add more players? Type: y/n");
-                while (true)
+                var response = _responseRequester.GetResponse(new List<char> { 'y', 'n' });
+                if (response == 'n')
                 {
-                    var response = Console.ReadLine().Trim();
-                    if (response == "Y" || response == "y")
-                    {
-                        break;
-                    }
-                    else if (response == "N" || response == "n")
-                    {
-                        createAnotherPlayer = false;
-                        break;
-                    }
-                    else
-                    {
-                        Console.WriteLine("That was not a valid input. Use y/n (or Y/N).");
-                    }
+                    createAnotherPlayer = false;
                 }
-                
             }
 
             return players;

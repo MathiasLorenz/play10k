@@ -1,7 +1,5 @@
 ﻿using Play10K.Base;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Play10K.CLI
 {
@@ -9,7 +7,11 @@ namespace Play10K.CLI
     {
         static void Main(string[] args)
         {
-            var players = PlayerCreator.Create();
+            Console.WriteLine("Welcome to playing 10k!");
+            Console.WriteLine();
+
+            var playerCreator = new PlayerCreator();
+            var players = playerCreator.Create();
             var game = new Game(players);
 
             game.Play();
