@@ -10,35 +10,15 @@ namespace Play10K.Base
 {
     internal class HandValidator
     {
-        public bool TryValidateAnyDice(Hand hand)
-        {
-            return InternalTryValidate(hand.Dice, hand.SavedDice.LastCollected, false, out var _);
-        }
-
-        public bool TryValidateAnyDice(Hand hand, out Dictionary<int, int>? diceCounter)
-        {
-            return InternalTryValidate(hand.Dice, hand.SavedDice.LastCollected, false, out diceCounter);
-        }
-
-        public bool TryValidateAllDice(Hand hand)
-        {
-            return InternalTryValidate(hand.Dice, hand.SavedDice.LastCollected, true, out var _);
-        }
-
-        public bool TryValidateAllDice(Hand hand, out Dictionary<int, int>? diceCounter)
-        {
-            return InternalTryValidate(hand.Dice, hand.SavedDice.LastCollected, true, out diceCounter);
-        }
-
         public bool TryValidateAnyDice(ICollection<int> dice)
         {
             return InternalTryValidate(dice, null, false, out var _);
         }
 
-        //public static bool TryValidateAnyDice(ICollection<int> dice, DiceCollection? lastCollected)
-        //{
-        //    return InternalTryValidate(dice, lastCollected, false, out var _);
-        //}
+        public bool TryValidateAnyDice(ICollection<int> dice, DiceCollection? lastCollected)
+        {
+            return InternalTryValidate(dice, lastCollected, false, out var _);
+        }
 
         //public static bool TryValidateAnyDice(ICollection<int> dice, out Dictionary<int, int>? diceCounter)
         //{
@@ -50,10 +30,10 @@ namespace Play10K.Base
         //    return InternalTryValidate(dice, lastCollected, false, out diceCounter);
         //}
 
-        //public static bool TryValidateAllDice(ICollection<int> dice)
-        //{
-        //    return InternalTryValidate(dice, null, true, out var _);
-        //}
+        public bool TryValidateAllDice(ICollection<int> dice)
+        {
+            return InternalTryValidate(dice, null, true, out var _);
+        }
 
         public bool TryValidateAllDice(ICollection<int> dice, DiceCollection? lastCollected)
         {
@@ -65,6 +45,7 @@ namespace Play10K.Base
         //    return InternalTryValidate(dice, null, true, out diceCounter);
         //}
 
+        // Todo: Get rid of out diceCounter, I don't like this pattern...
         public bool TryValidateAllDice(ICollection<int> dice, DiceCollection? lastCollected, out Dictionary<int, int>? diceCounter)
         {
             return InternalTryValidate(dice, lastCollected, true, out diceCounter);

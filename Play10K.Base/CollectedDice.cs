@@ -15,36 +15,6 @@ namespace Play10K.Base
         public Dictionary<int, int>? DiceCollectedThisHand { get; private set; } = null;
         public int Score { get => AllCollectedDice.Sum(x => x.Score); }
 
-        // Todo: I should probably consider doing this in two steps, one for verifying and one for collecting...
-        //public bool CollectAndVerifyDice(ICollection<int> dice)
-        //{
-        //    if (DiceCollectedThisHand != null)
-        //    {
-        //        // Consider the ability to add to this already collected hand. Maybe keep record of hands put into this class?
-        //        // Or make a converter from DiceCollection -> ICollection<int>, so that the extra dice can be added and recalculated.
-        //        throw new ArgumentException("You already have dice collected for this hand. You either need to discard these or save before rolling and collecting again.");
-        //    }
-
-        //    var result = _handValidator.TryValidateAllDice(dice, LastCollected, out var diceCounter);
-        //    if (result)
-        //    {
-        //        DiceCollectedThisHand = diceCounter;
-        //    }
-        //    return result;
-        //}
-
-        // Verifies that the selected list of dice to collect is valid.
-        public bool VerifyDiceToCollect(ICollection<int> dice)
-        {
-            if (DiceCollectedThisHand != null)
-            {
-                // Consider the ability to add to this already collected hand. Maybe keep record of hands put into this class?
-                // Or make a converter from DiceCollection -> ICollection<int>, so that the extra dice can be added and recalculated.
-                throw new ArgumentException("You already have dice collected for this hand. You either need to discard these or save before rolling and collecting again.");
-            }
-            return _handValidator.TryValidateAllDice(dice, LastCollected);
-        }
-
         // Collects the specified dice into DiceCollectedThisHand.
         public void CollectDice(ICollection<int> dice)
         {
@@ -101,6 +71,9 @@ namespace Play10K.Base
             DiceCollectedThisHand = null;
         }
 
+        // Should maybe be a Dictionary extension?
+        // Or at least public and unit tested!
+        // Todo: Refactor to a public place and unit test
         private List<DiceCollection> DictionaryToDiceCollection(Dictionary<int, int> dict)
         {
             if (dict.Count == 0)

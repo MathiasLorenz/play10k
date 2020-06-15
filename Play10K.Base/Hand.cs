@@ -1,30 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Play10K.Base
 {
     internal class Hand
     {
         private readonly Random _rand = new Random();
-        private int _savedScore = 0;
         private readonly HandValidator _handValidator = new HandValidator();
-        public List<int> Dice { get; private set; } = new List<int>(6);
-        public CollectedDice SavedDice { get; private set; } = new CollectedDice();
-        public int Score => _savedScore + SavedDice.Score;
+        private readonly UserInputHandler _userInputHandler = new UserInputHandler();
+        private int _savedScore = 0;
+        private List<int> _dice = new List<int>(6);
+        public CollectedDice _savedDice { get; private set; } = new CollectedDice();
+        public int Score => _savedScore + _savedDice.Score;
+
+        // If all dice have been used, then make a new set of dice and save score in from this hand (in _savedDice) to the total.
+        // Todo: Unit test
+        public void ReconcileHand()
+        {
+            if (_dice.Count > 0)
+            {
+                return;
+            }
+            if (_dice.Count < 0)
+            {
+                throw new InvalidOperationException("Negative amount of dice, this is not legal.");
+            }
+
+            _dice = new List<int>(6);
+            _savedScore += _savedDice.Score;
+            _savedDice = new CollectedDice();
+        }
 
         // Todo: Unit test
         public void Roll()
         {
-            for (int i = 0; i < Dice.Count; i++)
+            for (int i = 0; i < _dice.Count; i++)
             {
-                Dice[i] = _rand.Next(1, 7);
+                _dice[i] = _rand.Next(1, 7);
             }
         }
 
         public void Show()
         {
             var s = "";
-            foreach (var die in Dice)
+            foreach (var die in _dice)
             {
                 s += $" {die}";
             }
@@ -32,67 +52,69 @@ namespace Play10K.Base
         }
 
         public bool IsAnyCombinationValid()
-        {
-            return _handValidator.TryValidateAnyDice(this);
-        }
+            => _handValidator.TryValidateAnyDice(_dice, _savedDice.LastCollected);
 
         public void Clear()
         {
             _savedScore = 0;
-            SavedDice = new CollectedDice();
+            _savedDice = new CollectedDice();
         }
 
-        private bool CollectAndVerifyDice(ICollection<int> dice)
+        // Collect input from user as to which dice to collect.
+        public void CollectDice()
         {
-            return SavedDice.CollectAndVerifyDice(dice);
+            Console.WriteLine("Please input the dice you want to collect with space between. Finish with enter.");
+            var diceCollected = false;
+            while (diceCollected == false)
+            {
+                // Keep asking until a valid hand has been supplied.
+                var dice = _userInputHandler.GetSpecifiedDice().ToList();
+                if (VerifyDiceToCollect(dice) == false)
+                {
+                    // Todo: Implement a way to tell which dice were wrong.
+                    Console.WriteLine($"The specified dice were not valid. Try again :)");
+                    dice = _userInputHandler.GetSpecifiedDice().ToList();
+                }
+
+                // Collect the chosen. Ask the user whether or not to keep this choice.
+                _savedDice.CollectDice(dice);
+                // Todo: Fix this write out to the user
+                Console.WriteLine($"You have put XXXX aside right now.");
+                Console.WriteLine($"Together with the already collected, this amounts to YYYY points.");
+                Console.WriteLine($"Would you like to save these dice and move on with your turn? Note that this cannot be undone.");
+                Console.WriteLine($"Save these dice or cancel and choose again? Enter s/c:");
+                var response = _userInputHandler.GetCharResponse(new List<char> { 's', 'c' });
+                if (response == 's')
+                {
+                    _savedDice.SaveCollected();
+                    diceCollected = true;
+                }
+                else // response == 'c'
+                {
+                    _savedDice.DiscardLastCollected();
+                }
+            }
         }
 
-        //public bool CollectDiceFromHand()
-        //{
-        //    var collectedDice = GetSpecifiedDiceFromHand(Console.ReadLine());
-        //    if (collectedDice == null)
-        //    {
-        //        Console.WriteLine("I didn't quite get that. Please try to input again. Remember to input numbers [1, 6] seperated by spaces and finish with enter.");
-        //    }
-        //    else
-        //    {
-        //        if (CollectAndVerifyDice(collectedDice) == false)
-        //        {
-        //            Console.WriteLine("Those dice could not be validated, please try again and choose a valid combination.");
-        //        }
-        //        else
-        //        {
-        //            // Now collectedDice are in SavedDice.DiceCollectedThisHand.
-        //            diceCollected = true;
-        //        }
-        //    }
-
-        //}
-
-        // I would like to unit test this seperately => must be factored out.
-        // Maybe a Dice(Input)Collecter service? Can also handle the input (not super seperation of concerns in that case though..).
-        private List<int>? GetSpecifiedDiceFromHand(string input)
+        // Verifies that the selected list of dice to collect is valid.
+        private bool VerifyDiceToCollect(ICollection<int> dice)
         {
-            if (string.IsNullOrEmpty(input))
+            if (_savedDice.DiceCollectedThisHand != null)
             {
-                return null;
+                // Consider the ability to add to this already collected hand. Maybe keep record of hands put into this class?
+                // Or make a converter from DiceCollection -> ICollection<int>, so that the extra dice can be added and recalculated.
+                throw new InvalidOperationException("You already have dice collected for this hand. You either need to discard these or save before rolling and collecting again.");
             }
-            var dice = new List<int>();
+            return _handValidator.TryValidateAllDice(dice, _savedDice.LastCollected);
+        }
 
-            var splitInput = input.Split(' ');
-            foreach (var item in splitInput)
-            {
-                if (int.TryParse(item, out int result) && result >= 1 && result <= 6)
-                {
-                    dice.Add(result);
-                }
-                else
-                {
-                    return null;
-                }
-            }
-
-            return dice;
+        public char ContinueOrEndTurn()
+        {
+            Console.WriteLine($"This turn you have collected {Score} points.");
+            Console.WriteLine($"You have {_dice.Count} dice left.");
+            Console.WriteLine($"Do you want to continue your turn by rolling again, or do you want to stop now and collect the points?");
+            Console.WriteLine($"For continue/end, enter: c/e");
+            return _userInputHandler.GetCharResponse(new List<char> { 'c', 'e' });
         }
     }
 }
