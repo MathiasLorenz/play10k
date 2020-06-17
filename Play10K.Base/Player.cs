@@ -20,7 +20,6 @@ namespace Play10K.Base
         {
             Console.WriteLine($"It is now your turn, {Name}.");
             Console.WriteLine($"Your score is currently: {Score}");
-            //var doContinue = true;
             var hand = new Hand();
 
             while (true)
@@ -37,7 +36,7 @@ namespace Play10K.Base
                 Console.WriteLine($"Your dice right now are:");
                 hand.Show();
 
-                hand.CollectDice();
+                hand.CollectDiceFromUser();
 
                 var response = hand.ContinueOrEndTurn();
                 if (response == 'e')

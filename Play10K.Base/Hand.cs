@@ -24,7 +24,7 @@ namespace Play10K.Base
             }
             if (_dice.Count < 0)
             {
-                throw new InvalidOperationException("Negative amount of dice, this is not legal.");
+                throw new InvalidOperationException("Negative amount of dice, this should not be possible.");
             }
 
             _dice = new List<int>(6);
@@ -32,7 +32,6 @@ namespace Play10K.Base
             _savedDice = new CollectedDice();
         }
 
-        // Todo: Unit test
         public void Roll()
         {
             for (int i = 0; i < _dice.Count; i++)
@@ -61,11 +60,9 @@ namespace Play10K.Base
         }
 
         // Collect input from user as to which dice to collect.
-        public void CollectDice()
+        public void CollectDiceFromUser()
         {
-            Console.WriteLine("Please input the dice you want to collect with space between. Finish with enter.");
-            var diceCollected = false;
-            while (diceCollected == false)
+            while (true)
             {
                 // Keep asking until a valid hand has been supplied.
                 var dice = _userInputHandler.GetSpecifiedDice().ToList();
@@ -86,12 +83,12 @@ namespace Play10K.Base
                 var response = _userInputHandler.GetCharResponse(new List<char> { 's', 'c' });
                 if (response == 's')
                 {
-                    _savedDice.SaveCollected();
-                    diceCollected = true;
+                    _savedDice.SaveCollectedThisHand();
+                    break;
                 }
                 else // response == 'c'
                 {
-                    _savedDice.DiscardLastCollected();
+                    _savedDice.DiscardDiceCollectedThisHand();
                 }
             }
         }

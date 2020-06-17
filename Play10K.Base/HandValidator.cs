@@ -20,16 +20,6 @@ namespace Play10K.Base
             return InternalTryValidate(dice, lastCollected, false, out var _);
         }
 
-        //public static bool TryValidateAnyDice(ICollection<int> dice, out Dictionary<int, int>? diceCounter)
-        //{
-        //    return InternalTryValidate(dice, null, false, out diceCounter);
-        //}
-
-        //public static bool TryValidateAnyDice(ICollection<int> dice, DiceCollection? lastCollected, out Dictionary<int, int>? diceCounter)
-        //{
-        //    return InternalTryValidate(dice, lastCollected, false, out diceCounter);
-        //}
-
         public bool TryValidateAllDice(ICollection<int> dice)
         {
             return InternalTryValidate(dice, null, true, out var _);
@@ -40,18 +30,13 @@ namespace Play10K.Base
             return InternalTryValidate(dice, lastCollected, true, out var _);
         }
 
-        //public static bool TryValidateAllDice(ICollection<int> dice, out Dictionary<int, int>? diceCounter)
-        //{
-        //    return InternalTryValidate(dice, null, true, out diceCounter);
-        //}
-
         // Todo: Get rid of out diceCounter, I don't like this pattern...
         public bool TryValidateAllDice(ICollection<int> dice, DiceCollection? lastCollected, out Dictionary<int, int>? diceCounter)
         {
             return InternalTryValidate(dice, lastCollected, true, out diceCounter);
         }
 
-        private static bool InternalTryValidate(ICollection<int> dice, DiceCollection? lastCollected, bool validateAll, out Dictionary<int, int>? diceCounter)
+        private bool InternalTryValidate(ICollection<int> dice, DiceCollection? lastCollected, bool validateAll, out Dictionary<int, int>? diceCounter)
         {
             if (dice.Count == 0 || dice.Count > 6)
             {
@@ -68,11 +53,11 @@ namespace Play10K.Base
             return result;
         }
 
-        private static bool InternalTryValidateDiceCounter(int value, int count, DiceCollection? lastCollected)
+        private bool InternalTryValidateDiceCounter(int value, int count, DiceCollection? lastCollected)
         {
             if (count <= 0 || count > 6)
             {
-                throw new ArgumentException("You cannot save less than 1 or more than six dice.");
+                throw new ArgumentException("You cannot save less than one or more than six dice.");
             }
             else if (count >= 3)
             {

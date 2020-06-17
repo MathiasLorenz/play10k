@@ -28,7 +28,7 @@ namespace Play10K.Base
         }
 
         // Todo: Unit test and add to larger tests of all functionality
-        public void DiscardLastCollected()
+        public void DiscardDiceCollectedThisHand()
         {
             if (DiceCollectedThisHand == null)
             {
@@ -39,7 +39,7 @@ namespace Play10K.Base
 
         // Save dice collected this hand (DiceCollectedThisHand) to AllCollectedDice.
         // The hand is already validated, so we don't have to do this again.
-        public void SaveCollected()
+        public void SaveCollectedThisHand()
         {
             if (DiceCollectedThisHand == null)
             {
@@ -47,15 +47,14 @@ namespace Play10K.Base
             }
 
             var diceCollection = DictionaryToDiceCollection(DiceCollectedThisHand);
-            var lastCollected = AllCollectedDice.LastOrDefault();
 
-            if (lastCollected != null)
+            if (LastCollected != null)
             {
                 // If last collected is a three-or-more count try to add to this followed by the rest, otherwise just add all
-                var dieMatchesLastCollected = diceCollection.FirstOrDefault(x => x.Value == lastCollected.Value);
-                if (dieMatchesLastCollected != null && lastCollected.Count >= 3)
+                var dieMatchesLastCollected = diceCollection.FirstOrDefault(x => x.Value == LastCollected.Value);
+                if (dieMatchesLastCollected != null && LastCollected.Count >= 3)
                 {
-                    lastCollected.AddToCount(dieMatchesLastCollected.Count);
+                    LastCollected.AddToCount(dieMatchesLastCollected.Count);
                     diceCollection.Remove(dieMatchesLastCollected);
                 }
             }
@@ -63,8 +62,8 @@ namespace Play10K.Base
             // The OrderByDescending is to ensure that the following case does not occur:
             // Collecting e.g. { 2, 2, 2, 5 } is valid and gives 250 points, but the 2s are no longer valid for being added to for the next hand!
             // Also putting the 5 aside blocks that. Thus, after rolling the remaining 2 dice, another 2 cannot be added to the already collected.
-            // Therefore by ordering the collected after count, we always end AllCollectedDice with the lowest count we can and never
-            // accidently gets the chance to add to a non-valid collection.
+            // Therefore by ordering the collected after count, we always end AllCollectedDice with the lowest count, thus blocking the above mentioned
+            // illegal situation.
             diceCollection.OrderByDescending(x => x.Count);
             AllCollectedDice.AddRange(diceCollection);
 

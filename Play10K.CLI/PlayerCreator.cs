@@ -8,7 +8,7 @@ namespace Play10K.CLI
 {
     public class PlayerCreator
     {
-        private readonly UserInputHandler _responseRequester = new UserInputHandler();
+        private readonly UserInputHandler _userInputHandler = new UserInputHandler();
         public List<Player> Create()
         {
             List<Player> players = new List<Player>();
@@ -26,7 +26,7 @@ namespace Play10K.CLI
                 players.Add(new Player(playerName));
 
                 Console.WriteLine("Do you wanna add more players? Type: y/n");
-                var response = _responseRequester.GetCharResponse(new List<char> { 'y', 'n' });
+                var response = _userInputHandler.GetCharResponse(new List<char> { 'y', 'n' });
                 if (response == 'n')
                 {
                     createAnotherPlayer = false;
