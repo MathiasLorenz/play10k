@@ -11,10 +11,10 @@ namespace Play10K.Base
         private readonly UserInputHandler _userInputHandler = new UserInputHandler();
         private int _savedScore = 0;
         private List<int> _dice = new List<int>(6);
-        public CollectedDice _savedDice { get; private set; } = new CollectedDice();
+        private CollectedDice _savedDice = new CollectedDice();
         public int Score => _savedScore + _savedDice.Score;
 
-        // If all dice have been used, then make a new set of dice and save score in from this hand (in _savedDice) to the total.
+        // If all dice have been used, then make a new set of dice and save score in from this hand to the total.
         // Todo: Unit test
         public void ReconcileHand()
         {
