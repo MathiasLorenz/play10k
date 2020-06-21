@@ -6,78 +6,78 @@ using System.Text;
 
 namespace Play10K.Base.Test
 {
-    //[TestClass]
-    //public class CollectedDiceTests
-    //{
-    //    [TestMethod]
-    //    [DataRow(new int[] { 5 }, 50)]
-    //    [DataRow(new int[] { 1 }, 100)]
-    //    [DataRow(new int[] { 3, 3, 3 }, 300)]
-    //    [DataRow(new int[] { 4, 4, 4, 4, 4 }, 1600)]
-    //    [DataRow(new int[] { 1, 1, 1 }, 1000)]
-    //    [DataRow(new int[] { 1, 1, 1, 1 }, 2000)]
-    //    [DataRow(new int[] { 6, 6, 6, 6, 6, 6 }, 4800)]
-    //    [DataRow(new int[] { 1, 1 }, 200)]
-    //    [DataRow(new int[] { 5, 5 }, 100)]
-    //    [DataRow(new int[] { 1, 5 }, 150)]
-    //    [DataRow(new int[] { 5, 1 }, 150)]
-    //    [DataRow(new int[] { 1, 1, 5 }, 250)]
-    //    [DataRow(new int[] { 5, 5, 1 }, 200)]
-    //    [DataRow(new int[] { 1, 5, 1 }, 250)]
-    //    [DataRow(new int[] { 1, 5, 1, 1 }, 1050)]
-    //    [DataRow(new int[] { 1, 5, 1, 1, 1 }, 2050)]
-    //    [DataRow(new int[] { 1, 5, 1, 1, 1, 1 }, 4050)]
-    //    [DataRow(new int[] { 1, 1, 1, 5, 5, 5 }, 1500)]
-    //    [DataRow(new int[] { 1, 1, 1, 5, 5 }, 1100)]
-    //    [DataRow(new int[] { 1, 1, 1, 1, 5, 5 }, 2100)]
-    //    [DataRow(new int[] { 6, 6, 6, 1, 5, 5 }, 800)]
-    //    [DataRow(new int[] { 6, 6, 6, 5 }, 650)]
-    //    public void SaveCollected_SingleHand_CalculatesCorrectScore(int[] toCollect, int expectedScore)
-    //    {
-    //        var collectedDice = new CollectedDice();
-    //        var result = collectedDice.CollectAndVerifyDice(toCollect);
-    //        var expectedCollect = true;
-    //        Assert.AreEqual(expectedCollect, result);
-            
-    //        collectedDice.SaveCollected();
-    //        Assert.AreEqual(expectedScore, collectedDice.Score);
-    //    }
+    [TestClass]
+    public class CollectedDiceTests
+    {
+        [TestMethod]
+        [DataRow(new int[] { 1, 1, 1 })]
+        [DataRow(new int[] { 1, 5, 1 })]
+        [DataRow(new int[] { 4, 4, 4, 4 })]
+        [DataRow(new int[] { 5 })]
+        [DataRow(new int[] { 5, 5, 5, 5, 1 })]
+        public void CollectDice_Collects(int[] toCollect)
+        {
+            var collectedDice = new CollectedDice();
+            collectedDice.CollectDice(toCollect);
+            Assert.IsNotNull(collectedDice.DiceCollectedThisHand);
+        }
 
-    //    [TestMethod]
-    //    public void CollectAndVerifyDice_Then_SaveCollected_MultipleHands()
-    //    {
-    //        var collectedDice = new CollectedDice();
-    //        var result = collectedDice.CollectAndVerifyDice(new int[] { 3, 3, 3 });
-    //        var expected = true;
-    //        Assert.AreEqual(expected, result);
-    //        collectedDice.SaveCollected();
-    //        Assert.AreEqual(300, collectedDice.Score);
+        [TestMethod]
+        [DataRow(new int[] { 4 })]
+        [DataRow(new int[] { 5, 5, 5, 5, 2 })]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void CollectDice_IncorrectInput_ThrowsException(int[] toCollect)
+        {
+            var collectedDice = new CollectedDice();
+            collectedDice.CollectDice(toCollect);
+        }
 
-    //        result = collectedDice.CollectAndVerifyDice(new int[] { 4 });
-    //        expected = false;
-    //        Assert.AreEqual(expected, result);
+        [TestMethod]
+        [DataRow(new int[] { 5 }, new int[] { 5, 1 })]
+        [DataRow(new int[] { 1, 5 }, new int[] { 1, 1, 5, 1 })]
+        [DataRow(new int[] { 3, 3, 3 }, new int[] { 3, 3 })]
+        [DataRow(new int[] { 3, 3, 3, 3 }, new int[] { 3, 4 })]
+        [DataRow(new int[] { 3, 3, 3, 3, 1 }, new int[] { 3, 4, 1, 1 })] // This together with the below are the important, shows the dice ordering is not taking into account.
+        [DataRow(new int[] { 1, 3, 3, 3, 3 }, new int[] { 3, 4, 1, 1 })]
+        public void SaveCollectedThisHand_SingleHandWithNoLastCollected_SavesCorrectly(int[] toCollect, int[] expectedDiceCollection)
+        {
+            var collectedDice = new CollectedDice();
+            collectedDice.CollectDice(toCollect);
+            collectedDice.SaveCollectedThisHand();
 
-    //        result = collectedDice.CollectAndVerifyDice(new int[] { 3 });
-    //        expected = true;
-    //        Assert.AreEqual(expected, result);
-    //        collectedDice.SaveCollected();
-    //        Assert.AreEqual(600, collectedDice.Score);
+            Assert.IsNull(collectedDice.DiceCollectedThisHand);
 
-    //        result = collectedDice.CollectAndVerifyDice(new int[] { 1 });
-    //        expected = true;
-    //        Assert.AreEqual(expected, result);
-    //        collectedDice.SaveCollected();
-    //        Assert.AreEqual(700, collectedDice.Score);
+            VerifyAllCollectedDice(collectedDice, expectedDiceCollection);
+        }
 
-    //        result = collectedDice.CollectAndVerifyDice(new int[] { 3 });
-    //        expected = false;
-    //        Assert.AreEqual(expected, result);
+        [TestMethod]
+        [DataRow(new int[] { 1 }, new int[] { 5 }, new int[] { 1, 1, 5, 1 })]
+        [DataRow(new int[] { 1 }, new int[] { 1 }, new int[] { 1, 1, 1, 1 })]
+        [DataRow(new int[] { 4, 4, 4 }, new int[] { 4 }, new int[] { 4, 4 })]
+        [DataRow(new int[] { 4, 4, 4 }, new int[] { 1 }, new int[] { 4, 3, 1, 1 })]
+        public void SaveCollectedThisHand_MultipleHands_SavesCorrectly(int[] collectFirst, int[] thenCollect, int[] expectedDiceCollection)
+        {
+            var collectedDice = new CollectedDice();
+            collectedDice.CollectDice(collectFirst);
+            collectedDice.SaveCollectedThisHand();
+            collectedDice.CollectDice(thenCollect);
+            collectedDice.SaveCollectedThisHand();
 
-    //        result = collectedDice.CollectAndVerifyDice(new int[] { 5 });
-    //        expected = true;
-    //        Assert.AreEqual(expected, result);
-    //        collectedDice.SaveCollected();
-    //        Assert.AreEqual(750, collectedDice.Score);
-    //    }
-    //}
+            Assert.IsNull(collectedDice.DiceCollectedThisHand);
+
+            VerifyAllCollectedDice(collectedDice, expectedDiceCollection);
+        }
+
+        private void VerifyAllCollectedDice(CollectedDice collectedDice, int[] expectedDiceCollection)
+        {
+            int index = 0;
+            foreach (var diceCollection in collectedDice.AllCollectedDice)
+            {
+                var expected = new DiceCollection(expectedDiceCollection[index++], expectedDiceCollection[index++]);
+                Assert.AreEqual(expected.Count, diceCollection.Count);
+                Assert.AreEqual(expected.Value, diceCollection.Value);
+            }
+        }
+
+    }
 }

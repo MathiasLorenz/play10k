@@ -27,12 +27,11 @@ namespace Play10K.Base
             DiceCollectedThisHand = diceCounter;
         }
 
-        // Todo: Unit test and add to larger tests of all functionality
         public void DiscardDiceCollectedThisHand()
         {
             if (DiceCollectedThisHand == null)
             {
-                throw new ArgumentNullException("No last collected to discard.");
+                throw new InvalidOperationException("No last collected to discard.");
             }
             DiceCollectedThisHand = null;
         }
@@ -64,7 +63,7 @@ namespace Play10K.Base
             // Also putting the 5 aside blocks that. Thus, after rolling the remaining 2 dice, another 2 cannot be added to the already collected.
             // Therefore by ordering the collected after count, we always end AllCollectedDice with the lowest count, thus blocking the above mentioned
             // illegal situation.
-            diceCollection.OrderByDescending(x => x.Count);
+            diceCollection = diceCollection.OrderByDescending(x => x.Count).ToList();
             AllCollectedDice.AddRange(diceCollection);
 
             DiceCollectedThisHand = null;
@@ -79,7 +78,7 @@ namespace Play10K.Base
             {
                 throw new ArgumentException("Cannot parse an empty dictionary of value and count.");
             }
-            
+
             var diceCollection = new List<DiceCollection>();
             foreach (var (value, count) in dict)
             {
