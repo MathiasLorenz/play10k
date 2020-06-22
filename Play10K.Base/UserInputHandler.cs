@@ -7,6 +7,12 @@ namespace Play10K.Base
 {
     public class UserInputHandler
     {
+        private readonly UserInputHandlerInternal _userInputHandlerInternal = new UserInputHandlerInternal();
+        /// <summary>
+        /// Collects a char response from the user.
+        /// </summary>
+        /// <param name="validResponses">List of valid response chars.</param>
+        /// <returns>The char supplied from the user. Is in the input list <paramref name="validResponses"/>.</returns>
         public char GetCharResponse(ICollection<char> validResponses)
         {
             while (true)
@@ -24,38 +30,27 @@ namespace Play10K.Base
             }
         }
 
+        /// <summary>
+        /// Collects the dice from the user to be saved in this roll.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<int> GetSpecifiedDice()
         {
-            IEnumerable<int>? result = null;
-            while (result == null)
+            while (true)
             {
                 Console.WriteLine($"Input dice to collect.");
                 Console.WriteLine($"Type them without spaces or anything, like 333 or 5.");
                 var input = Console.ReadLine();
-                result = GetSpecifiedDiceInternal(input);
-                if (result == null)
+                var dice = _userInputHandlerInternal.GetSpecifiedDiceInternal(input);
+                if (dice != null)
+                {
+                    return dice;
+                }
+                else
                 {
                     Console.WriteLine($"Seems like your input was invalid. Try again!");
                 }
             }
-            return result;
-        }
-
-        // Todo: Unit test, cannot be right now as it is private :(
-        private IEnumerable<int>? GetSpecifiedDiceInternal(string input)
-        {
-            if (string.IsNullOrEmpty(input))
-            {
-                return null;
-            }
-
-            var splitInput = input.Select(x => (int)Char.GetNumericValue(x));
-            if (splitInput == null || splitInput.Any(x => x < 1 || x > 6))
-            {
-                return null;
-            }
-
-            return splitInput;
         }
     }
 }

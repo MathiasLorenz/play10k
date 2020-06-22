@@ -15,7 +15,10 @@ namespace Play10K.Base
         public Dictionary<int, int>? DiceCollectedThisHand { get; private set; } = null;
         public int Score { get => AllCollectedDice.Sum(x => x.Score); }
 
-        // Collects the specified dice into DiceCollectedThisHand.
+        /// <summary>
+        /// Collects the specified dice into DiceCollectedThisHand.
+        /// </summary>
+        /// <param name="dice"></param>
         public void CollectDice(ICollection<int> dice)
         {
             var validation = _handValidator.TryValidateAllDice(dice, LastCollected, out var diceCounter);
@@ -27,6 +30,9 @@ namespace Play10K.Base
             DiceCollectedThisHand = diceCounter;
         }
 
+        /// <summary>
+        /// This is called when a set of dice has been collected this hand, but the user chose to discard this and choose something else.
+        /// </summary>
         public void DiscardDiceCollectedThisHand()
         {
             if (DiceCollectedThisHand == null)
@@ -36,8 +42,10 @@ namespace Play10K.Base
             DiceCollectedThisHand = null;
         }
 
-        // Save dice collected this hand (DiceCollectedThisHand) to AllCollectedDice.
-        // The hand is already validated, so we don't have to do this again.
+        /// <summary>
+        /// Save dice collected this hand (DiceCollectedThisHand) to AllCollectedDice.
+        /// The hand is already validated, so we don't have to do this again.
+        /// </summary>
         public void SaveCollectedThisHand()
         {
             if (DiceCollectedThisHand == null)
@@ -49,7 +57,7 @@ namespace Play10K.Base
 
             if (LastCollected != null)
             {
-                // If last collected is a three-or-more count try to add to this followed by the rest, otherwise just add all
+                // If last collected is a three-or-more count try to add to this followed by the rest, otherwise just add all.
                 var dieMatchesLastCollected = diceCollection.FirstOrDefault(x => x.Value == LastCollected.Value);
                 if (dieMatchesLastCollected != null && LastCollected.Count >= 3)
                 {
