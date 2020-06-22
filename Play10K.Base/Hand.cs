@@ -10,7 +10,7 @@ namespace Play10K.Base
         private readonly HandValidator _handValidator = new HandValidator();
         private readonly UserInputHandler _userInputHandler = new UserInputHandler();
         private int _savedScore = 0;
-        private List<int> _dice = new List<int>(6);
+        private List<int> _dice = new List<int> { 0, 0, 0, 0, 0, 0 };
         private CollectedDice _savedDice = new CollectedDice();
         public int Score => _savedScore + _savedDice.Score;
 
@@ -27,7 +27,7 @@ namespace Play10K.Base
                 throw new InvalidOperationException("Negative amount of dice, this should not be possible.");
             }
 
-            _dice = new List<int>(6);
+            _dice = new List<int> { 0, 0, 0, 0, 0, 0 };
             _savedScore += _savedDice.Score;
             _savedDice = new CollectedDice();
         }
@@ -60,6 +60,7 @@ namespace Play10K.Base
         }
 
         // Collect input from user as to which dice to collect.
+        // Todo: Unit test. Test that correct is saved and removed from the current dice.
         public void CollectDiceFromUser()
         {
             while (true)
@@ -84,6 +85,10 @@ namespace Play10K.Base
                 if (response == 's')
                 {
                     _savedDice.SaveCollectedThisHand();
+                    foreach (var die in dice)
+                    {
+                        _dice.Remove(die);
+                    }
                     break;
                 }
                 else // response == 'c'

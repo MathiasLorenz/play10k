@@ -8,7 +8,7 @@ namespace Play10K.Base
     public class Player
     {
         public string Name { get; }
-        public int Score { get; } = 0;
+        public int Score { get; private set; } = 0;
 
         public Player(string name)
         {
@@ -45,6 +45,7 @@ namespace Play10K.Base
                 }
             }
 
+            Score += hand.Score;
             Console.WriteLine($"Your turn is now over, {Name}.");
             Console.WriteLine($"You collected {hand.Score} points this turn and now have {Score} points in total.");
         }

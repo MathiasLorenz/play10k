@@ -26,12 +26,12 @@ namespace Play10K.Base
 
         public IEnumerable<int> GetSpecifiedDice()
         {
-            var input = Console.ReadLine();
             IEnumerable<int>? result = null;
             while (result == null)
             {
                 Console.WriteLine($"Input dice to collect.");
                 Console.WriteLine($"Type them without spaces or anything, like 333 or 5.");
+                var input = Console.ReadLine();
                 result = GetSpecifiedDiceInternal(input);
                 if (result == null)
                 {
@@ -50,7 +50,7 @@ namespace Play10K.Base
             }
 
             var splitInput = input.Select(x => (int)Char.GetNumericValue(x));
-            if (splitInput == null || splitInput.Any(x => x > 1 || x > 6))
+            if (splitInput == null || splitInput.Any(x => x < 1 || x > 6))
             {
                 return null;
             }
