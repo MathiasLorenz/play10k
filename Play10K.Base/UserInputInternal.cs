@@ -7,7 +7,7 @@ using System.Text;
 [assembly: InternalsVisibleTo("Play10K.Base.Test")]
 namespace Play10K.Base
 {
-    internal class UserInputHandlerInternal
+    internal class UserInputInternal
     {
         public IEnumerable<int>? GetSpecifiedDiceInternal(string input)
         {

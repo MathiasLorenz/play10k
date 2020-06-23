@@ -15,7 +15,7 @@ namespace Play10K.Base.Test
         [DataRow("98765644321", new int[] { 9, 8, 7, 6, 5, 6, 4, 4, 3, 2, 1 })]
         public void GetSpecifiedDiceInternal_CorrectInput_ReturnsValues(string input, int[] expected)
         {
-            var userInputHandlerInternal = new UserInputHandlerInternal();
+            var userInputHandlerInternal = new UserInputInternal();
             var result = userInputHandlerInternal.GetSpecifiedDiceInternal(input);
             Assert.IsNotNull(result);
             CollectionAssert.AreEqual(expected.ToList(), result.ToList());
@@ -27,7 +27,7 @@ namespace Play10K.Base.Test
         [DataRow("╩")]
         public void GetSpecifiedDiceInternal_InvalidInput_ReturnsNull(string input)
         {
-            var userInputHandlerInternal = new UserInputHandlerInternal();
+            var userInputHandlerInternal = new UserInputInternal();
             var result = userInputHandlerInternal.GetSpecifiedDiceInternal(input);
             Assert.IsNull(result);
         }

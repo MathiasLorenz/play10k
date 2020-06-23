@@ -8,7 +8,7 @@ namespace Play10K.Base
     {
         private readonly Random _rand = new Random();
         private readonly HandValidator _handValidator = new HandValidator();
-        private readonly UserInputHandler _userInputHandler = new UserInputHandler();
+        private readonly UserInput _userInput = new UserInput();
         private int _savedScore = 0;
         private List<int> _dice = new List<int> { 0, 0, 0, 0, 0, 0 };
         private CollectedDice _savedDice = new CollectedDice();
@@ -66,12 +66,12 @@ namespace Play10K.Base
             while (true)
             {
                 // Keep asking until a valid hand has been supplied.
-                var dice = _userInputHandler.GetSpecifiedDice().ToList();
+                var dice = _userInput.GetSpecifiedDice().ToList();
                 if (VerifyDiceToCollect(dice) == false)
                 {
                     // Todo: Implement a way to tell which dice were wrong.
                     Console.WriteLine($"The specified dice were not valid. Try again :)");
-                    dice = _userInputHandler.GetSpecifiedDice().ToList();
+                    dice = _userInput.GetSpecifiedDice().ToList();
                 }
 
                 // Collect the chosen. Ask the user whether or not to keep this choice.
@@ -81,7 +81,7 @@ namespace Play10K.Base
                 Console.WriteLine($"Together with the already collected, this amounts to YYYY points.");
                 Console.WriteLine($"Would you like to save these dice and move on with your turn? Note that this cannot be undone.");
                 Console.WriteLine($"Save these dice or cancel and choose again? Enter s/c:");
-                var response = _userInputHandler.GetCharResponse(new List<char> { 's', 'c' });
+                var response = _userInput.GetCharResponse(new List<char> { 's', 'c' });
                 if (response == 's')
                 {
                     _savedDice.SaveCollectedThisHand();
@@ -116,7 +116,7 @@ namespace Play10K.Base
             Console.WriteLine($"You have {_dice.Count} dice left.");
             Console.WriteLine($"Do you want to continue your turn by rolling again, or do you want to stop now and collect the points?");
             Console.WriteLine($"For continue/end, enter: c/e");
-            return _userInputHandler.GetCharResponse(new List<char> { 'c', 'e' });
+            return _userInput.GetCharResponse(new List<char> { 'c', 'e' });
         }
     }
 }

@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Play10K.Base
 {
-    public class UserInputHandler
+    public class UserInput
     {
-        private readonly UserInputHandlerInternal _userInputHandlerInternal = new UserInputHandlerInternal();
+        private readonly UserInputInternal _userInputInternal = new UserInputInternal();
         /// <summary>
         /// Collects a char response from the user.
         /// </summary>
@@ -41,7 +41,7 @@ namespace Play10K.Base
                 Console.WriteLine($"Input dice to collect.");
                 Console.WriteLine($"Type them without spaces or anything, like 333 or 5.");
                 var input = Console.ReadLine();
-                var dice = _userInputHandlerInternal.GetSpecifiedDiceInternal(input);
+                var dice = _userInputInternal.GetSpecifiedDiceInternal(input);
                 if (dice != null)
                 {
                     return dice;
