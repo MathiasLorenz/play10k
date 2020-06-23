@@ -77,10 +77,7 @@ namespace Play10K.Base
             DiceCollectedThisHand = null;
         }
 
-        // Should maybe be a Dictionary extension?
-        // Or at least public and unit tested!
-        // Todo: Refactor to a public place and unit test
-        private List<DiceCollection> DictionaryToDiceCollection(Dictionary<int, int> dict)
+        public List<DiceCollection> DictionaryToDiceCollection(Dictionary<int, int> dict)
         {
             if (dict.Count == 0)
             {

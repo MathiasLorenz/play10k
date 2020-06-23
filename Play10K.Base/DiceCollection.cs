@@ -47,5 +47,23 @@ namespace Play10K.Base
                 throw new ArgumentException("The count for a DiceCollection can never be two.");
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is DiceCollection other))
+            {
+                return false;
+            }
+            else
+            {
+                // Can this be done with Reflection? Is that a good idea?
+                return Value == other.Value && Count == other.Count;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Play10K.Base.CollectionExtensions;
 
 namespace Play10K.Base.Test
 {
@@ -39,7 +39,8 @@ namespace Play10K.Base.Test
         [DataRow(new int[] { 3, 3, 3, 3 }, new int[] { 3, 4 })]
         [DataRow(new int[] { 3, 3, 3, 3, 1 }, new int[] { 3, 4, 1, 1 })] // This together with the below are the important, shows the dice ordering is not taking into account.
         [DataRow(new int[] { 1, 3, 3, 3, 3 }, new int[] { 3, 4, 1, 1 })]
-        public void SaveCollectedThisHand_SingleHandWithNoLastCollected_SavesCorrectly(int[] toCollect, int[] expectedDiceCollection)
+        [DataRow(new int[] { 3, 3, 1, 3, 3 }, new int[] { 3, 4, 1, 1 })]
+        public void SaveCollectedThisHand_SingleHandWithNoLastCollected_SavesCorrectly(int[] toCollect, int[] toExpectedDiceCollections)
         {
             var collectedDice = new CollectedDice();
             collectedDice.CollectDice(toCollect);
@@ -47,7 +48,7 @@ namespace Play10K.Base.Test
 
             Assert.IsNull(collectedDice.DiceCollectedThisHand);
 
-            VerifyAllCollectedDice(collectedDice, expectedDiceCollection);
+            VerifyAllCollectedDice(collectedDice, toExpectedDiceCollections);
         }
 
         [TestMethod]
@@ -55,7 +56,7 @@ namespace Play10K.Base.Test
         [DataRow(new int[] { 1 }, new int[] { 1 }, new int[] { 1, 1, 1, 1 })]
         [DataRow(new int[] { 4, 4, 4 }, new int[] { 4 }, new int[] { 4, 4 })]
         [DataRow(new int[] { 4, 4, 4 }, new int[] { 1 }, new int[] { 4, 3, 1, 1 })]
-        public void SaveCollectedThisHand_MultipleHands_SavesCorrectly(int[] collectFirst, int[] thenCollect, int[] expectedDiceCollection)
+        public void SaveCollectedThisHand_MultipleHands_SavesCorrectly(int[] collectFirst, int[] thenCollect, int[] toExpectedDiceCollections)
         {
             var collectedDice = new CollectedDice();
             collectedDice.CollectDice(collectFirst);
@@ -65,19 +66,47 @@ namespace Play10K.Base.Test
 
             Assert.IsNull(collectedDice.DiceCollectedThisHand);
 
-            VerifyAllCollectedDice(collectedDice, expectedDiceCollection);
+            VerifyAllCollectedDice(collectedDice, toExpectedDiceCollections);
         }
 
-        private void VerifyAllCollectedDice(CollectedDice collectedDice, int[] expectedDiceCollection)
+        private List<DiceCollection> ListToDiceCollection(int[] list)
         {
-            int index = 0;
-            foreach (var diceCollection in collectedDice.AllCollectedDice)
+            Assert.IsTrue(list.Length % 2 == 0);
+
+            var diceCollections = new List<DiceCollection>();
+            var index = 0;
+            for (int i = 0; i < list.Length / 2; i++)
             {
-                var expected = new DiceCollection(expectedDiceCollection[index++], expectedDiceCollection[index++]);
-                Assert.AreEqual(expected.Count, diceCollection.Count);
-                Assert.AreEqual(expected.Value, diceCollection.Value);
+                diceCollections.Add(new DiceCollection(list[index++], list[index++]));
             }
+            return diceCollections;
         }
 
+        private void VerifyAllCollectedDice(CollectedDice collectedDice, int[] toExptecedDiceCollections)
+        {
+            var expectedDiceCollections = ListToDiceCollection(toExptecedDiceCollections);
+            CollectionAssert.AreEqual(expectedDiceCollections, collectedDice.AllCollectedDice);
+        }
+
+        // Todo: More tests and consider if this is the right approach.
+        [TestMethod]
+        [DataRow(new int[] { 1, 1, 1, 5 }, new int[] { 1, 3, 5, 1 })]
+        [DataRow(new int[] { 1, 1, 5 }, new int[] { 1, 1, 1, 1, 5, 1 })]
+        [DataRow(new int[] { 1, 6, 6, 6, 6 }, new int[] { 6, 4, 1, 1 })]
+        public void DictionaryToDiceCollection_CollectsCorrectly(int[] toDictionary, int[] toExpectedDiceCollections)
+        {
+            var collectedDice = new CollectedDice();
+            var dict = toDictionary.DictionaryCounter();
+            var expectedDiceCollections = ListToDiceCollection(toExpectedDiceCollections);
+
+            var actualDiceCollections = collectedDice.DictionaryToDiceCollection(dict);
+
+            // Usually we don't care about the order at this step (only later), but for some reason
+            // CollectionAssert.AreEquivalent doesn't work for me, so I need to order and use .AreEqual on the ordered sets.
+            expectedDiceCollections = expectedDiceCollections.OrderBy(x => x.Count).ToList();
+            actualDiceCollections = actualDiceCollections.OrderBy(x => x.Count).ToList();
+
+            CollectionAssert.AreEqual(expectedDiceCollections, actualDiceCollections);
+        }
     }
 }
