@@ -14,7 +14,9 @@ namespace Play10K.Base
         private CollectedDice _savedDice = new CollectedDice();
         public int Score => _savedScore + _savedDice.Score;
 
-        // If all dice have been used, then make a new set of dice and save score in from this hand to the total.
+        /// <summary>
+        /// If all dice have been used, make a new set of dice and save score in from this hand to the total.
+        /// </summary>
         // Todo: Unit test
         public void ReconcileHand()
         {

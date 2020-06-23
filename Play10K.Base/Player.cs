@@ -28,7 +28,6 @@ namespace Play10K.Base
                 hand.Roll();
                 if (hand.IsAnyCombinationValid() == false)
                 {
-                    // Clear hand and break out - turn is over
                     hand.Clear();
                     break;
                 }
