@@ -8,10 +8,9 @@ namespace Play10K.Base
     {
         private readonly Random _rand = new Random();
         private readonly HandValidator _handValidator = new HandValidator();
-        private readonly UserInput _userInput = new UserInput();
         private int _savedScore = 0;
-        private List<int> _dice = new List<int> { 0, 0, 0, 0, 0, 0 };
         private CollectedDice _savedDice = new CollectedDice();
+        public List<int> Dice { get; private set; } = new List<int> { 0, 0, 0, 0, 0, 0 };
         public int Score => _savedScore + _savedDice.Score;
 
         /// <summary>
@@ -20,40 +19,30 @@ namespace Play10K.Base
         // Todo: Unit test
         public void ReconcileHand()
         {
-            if (_dice.Count > 0)
+            if (Dice.Count > 0)
             {
                 return;
             }
-            if (_dice.Count < 0)
+            if (Dice.Count < 0)
             {
                 throw new InvalidOperationException("Negative amount of dice, this should not be possible.");
             }
 
-            _dice = new List<int> { 0, 0, 0, 0, 0, 0 };
+            Dice = new List<int> { 0, 0, 0, 0, 0, 0 };
             _savedScore += _savedDice.Score;
             _savedDice = new CollectedDice();
         }
 
         public void Roll()
         {
-            for (int i = 0; i < _dice.Count; i++)
+            for (int i = 0; i < Dice.Count; i++)
             {
-                _dice[i] = _rand.Next(1, 7);
+                Dice[i] = _rand.Next(1, 7);
             }
-        }
-
-        public void Show()
-        {
-            var s = "";
-            foreach (var die in _dice)
-            {
-                s += $" {die}";
-            }
-            Console.WriteLine(s);
         }
 
         public bool IsAnyCombinationValid()
-            => _handValidator.TryValidateAnyDice(_dice, _savedDice.LastCollected);
+            => _handValidator.TryValidateAnyDice(Dice, _savedDice.LastCollected);
 
         public void Clear()
         {
@@ -89,7 +78,7 @@ namespace Play10K.Base
                     _savedDice.SaveCollectedThisHand();
                     foreach (var die in dice)
                     {
-                        _dice.Remove(die);
+                        Dice.Remove(die);
                     }
                     break;
                 }
@@ -110,15 +99,6 @@ namespace Play10K.Base
                 throw new InvalidOperationException("You already have dice collected for this hand. You either need to discard these or save before rolling and collecting again.");
             }
             return _handValidator.TryValidateAllDice(dice, _savedDice.LastCollected);
-        }
-
-        public char ContinueOrEndTurn()
-        {
-            Console.WriteLine($"This turn you have collected {Score} points.");
-            Console.WriteLine($"You have {_dice.Count} dice left.");
-            Console.WriteLine($"Do you want to continue your turn by rolling again, or do you want to stop now and collect the points?");
-            Console.WriteLine($"For continue/end, enter: c/e");
-            return _userInput.GetCharResponse(new List<char> { 'c', 'e' });
         }
     }
 }

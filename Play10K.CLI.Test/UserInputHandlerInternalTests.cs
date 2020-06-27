@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Play10K.CLI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Text;
 namespace Play10K.Base.Test
 {
     [TestClass]
-    public class UserInputHandlerInternalTests
+    public class UserInputInternalTests
     {
         [TestMethod]
         [DataRow("535", new int[] { 5, 3, 5 })]

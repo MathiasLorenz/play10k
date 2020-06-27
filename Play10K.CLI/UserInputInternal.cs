@@ -4,8 +4,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-[assembly: InternalsVisibleTo("Play10K.Base.Test")]
-namespace Play10K.Base
+[assembly: InternalsVisibleTo("Play10K.CLI.Test")]
+namespace Play10K.CLI
 {
     internal class UserInputInternal
     {
