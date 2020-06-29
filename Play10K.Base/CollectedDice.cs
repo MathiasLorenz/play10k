@@ -9,51 +9,14 @@ namespace Play10K.Base
 {
     internal class CollectedDice
     {
-        private readonly HandValidator _handValidator = new HandValidator();
         public List<DiceCollection> AllCollectedDice { get; private set; } = new List<DiceCollection>();
         public DiceCollection? LastCollected => AllCollectedDice.LastOrDefault();
-        public Dictionary<int, int>? DiceCollectedThisHand { get; private set; } = null;
         public int Score { get => AllCollectedDice.Sum(x => x.Score); }
 
-        /// <summary>
-        /// Collects the specified dice into DiceCollectedThisHand.
-        /// </summary>
-        /// <param name="dice"></param>
-        public void CollectDice(ICollection<int> dice)
+        public void Collect(ICollection<int> dice)
         {
-            var validation = _handValidator.TryValidateAllDice(dice, LastCollected, out var diceCounter);
-            if (validation == false)
-            {
-                throw new InvalidOperationException("Dice should already be validated here, the dice have been changed, which should not be possible.");
-            }
-
-            DiceCollectedThisHand = diceCounter;
-        }
-
-        /// <summary>
-        /// This is called when a set of dice has been collected this hand, but the user chose to discard this and choose something else.
-        /// </summary>
-        public void DiscardDiceCollectedThisHand()
-        {
-            if (DiceCollectedThisHand == null)
-            {
-                throw new InvalidOperationException("No last collected to discard.");
-            }
-            DiceCollectedThisHand = null;
-        }
-
-        /// <summary>
-        /// Save dice collected this hand (DiceCollectedThisHand) to AllCollectedDice.
-        /// The hand is already validated, so we don't have to do this again.
-        /// </summary>
-        public void SaveCollectedThisHand()
-        {
-            if (DiceCollectedThisHand == null)
-            {
-                throw new ArgumentException("You have not put any dice aside and thus they cannot be saved.");
-            }
-
-            var diceCollection = DictionaryToDiceCollection(DiceCollectedThisHand);
+            // Doing dice -> DictionaryCounter -> DiceCollection could skip one step.
+            var diceCollection = DictionaryToDiceCollection(dice.DictionaryCounter());
 
             if (LastCollected != null)
             {
@@ -73,10 +36,9 @@ namespace Play10K.Base
             // illegal situation.
             diceCollection = diceCollection.OrderByDescending(x => x.Count).ToList();
             AllCollectedDice.AddRange(diceCollection);
-
-            DiceCollectedThisHand = null;
         }
 
+        // Todo: Factor out and make private here.
         public List<DiceCollection> DictionaryToDiceCollection(Dictionary<int, int> dict)
         {
             if (dict.Count == 0)

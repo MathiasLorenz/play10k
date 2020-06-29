@@ -6,8 +6,7 @@ namespace Play10K.CLI
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to playing 10k!");
-            Console.WriteLine();
+            Messager.StartGame();
 
             var playerCreator = new PlayerCreator();
             var players = playerCreator.Create();
@@ -15,7 +14,7 @@ namespace Play10K.CLI
 
             game.Play();
 
-            Congratulator.EndGame(players);
+            Messager.EndGame(players);
         }
     }
 }

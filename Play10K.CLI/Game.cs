@@ -1,13 +1,13 @@
 ﻿using Play10K.Base;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Play10K.CLI
 {
     public class Game
     {
         public List<Player> Players { get; } = new List<Player>();
+        private readonly GameDriver _gameDriver = new GameDriver();
 
         public Game(List<Player> players)
         {
@@ -31,35 +31,40 @@ namespace Play10K.CLI
         }
 
         // Main logic, here the game is actually played.
-        public void TakeTurn(Player player)
+        // Todo: Move this out. Maybe create a CLIPlayer class that implements this TakeTurn and has a base Player?
+        // Seems like a bit of an anti-pattern to have GameDriver that takes in a Player in all methods....
+        private void TakeTurn(Player player)
         {
-            Console.WriteLine($"It is now your turn, {player.Name}.");
-            Console.WriteLine($"Your score is currently: {player.Score}");
+            _gameDriver.MessageStartOfTurn(player);
+            player.StartTurn();
+            bool addToScore = true;
 
             while (true)
             {
                 player.ReconcileHand();
-                var canDoAnythingAfterRoll = player.Roll();
-                if (canDoAnythingAfterRoll == false)
+                player.Roll();
+                _gameDriver.ShowHand(player);
+
+                if (player.CanDoAnything == false)
                 {
-                    // Todo: Write out: You lost, rip.
+                    _gameDriver.MessageNoValidDice();
+                    addToScore = false;
                     break;
                 }
                 
-                player.ShowDice();
+                _gameDriver.ShowHand(player);
+                var collectedDice = _gameDriver.GetSpecifiedDice(player);
+                player.CollectDice(collectedDice);
 
-                hand.CollectDiceFromUser();
-
-                var response = player.ContinueOrEndTurn();
+                var response = _gameDriver.ContinueOrEndTurn(player);
                 if (response == 'e')
                 {
                     break;
                 }
             }
 
-            player.UpdateScore(player.TurnScore);
-            Console.WriteLine($"Your turn is now over, {player.Name}.");
-            Console.WriteLine($"You collected {player.TurnScore} points this turn and now have {player.Score} points in total.");
+            player.EndTurn(addToScore);
+            _gameDriver.MessageEndOfTurn(player);
         }
     }
 }

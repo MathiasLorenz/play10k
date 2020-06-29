@@ -10,13 +10,29 @@ namespace Play10K.Base
     {
         public string Name { get; }
         public int Score { get; private set; } = 0;
-        public int TurnScore => _hand.Score;
 
-        private readonly Hand _hand = new Hand();
+        private Hand _hand = new Hand();
+
+        public int TurnScore => _hand.Score;
+        public List<int> Dice => _hand.Dice;
 
         public Player(string name)
         {
             Name = name;
+        }
+
+        public void StartTurn()
+        {
+            _hand = new Hand();
+        }
+
+        public void EndTurn(bool AddTurnScore)
+        {
+            if (AddTurnScore)
+            {
+                Score += TurnScore;
+            }
+            _hand.Clear();
         }
 
         public void ReconcileHand()
@@ -24,46 +40,18 @@ namespace Play10K.Base
             _hand.ReconcileHand();
         }
 
-        public bool Roll()
-        {
-            _hand.Roll();
-            if (_hand.IsAnyCombinationValid() == false)
-            {
-                _hand.Clear();
-                return false;
-            }
-            return true;
-        }
+        public void Roll()
+            => _hand.Roll();
 
-        public void ShowDice()
-        {
-            Console.WriteLine($"This turn you have collected {TurnScore} points.");
-            Console.WriteLine($"Your dice right now are:");
-            var s = "";
-            foreach (var die in _hand.Dice)
-            {
-                s += $" {die}";
-            }
-            Console.WriteLine(s);
-        }
+        public bool CanDoAnything => _hand.IsAnyCombinationValid();
 
-        public char ContinueOrEndTurn()
-        {
-            Console.WriteLine($"This turn you have collected {Score} points.");
-            Console.WriteLine($"You have {_hand.Dice.Count} dice left.");
-            Console.WriteLine($"Do you want to continue your turn by rolling again, or do you want to stop now and collect the points?");
-            Console.WriteLine($"For continue/end, enter: c/e");
-            return _userInput.GetCharResponse(new List<char> { 'c', 'e' });
-        }
+        public bool VerifyDiceToCollect(ICollection<int> dice)
+            => _hand.VerifyDiceToCollect(dice);
 
-        public void UpdateScore(int scoreToAdd)
+        public void CollectDice(ICollection<int> dice)
         {
-            if (scoreToAdd < 0)
-            {
-                throw new ArgumentException("Cannot add a negative score to overall score.");
-            }
-
-            Score += scoreToAdd;
+            _hand.SaveDiceToCollected(dice);
+            _hand.RemoveDiceFromHand(dice);
         }
     }
 }

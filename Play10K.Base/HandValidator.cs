@@ -8,6 +8,8 @@ using System.Text;
 [assembly: InternalsVisibleTo("Play10K.Base.Test")]
 namespace Play10K.Base
 {
+    // Todo: FIX THE HORRIBLE ERROR THAT IS THIS CODE.
+    // Omg how could I let this happen.... I need to input the actual hand in order to validate all dice.
     internal class HandValidator
     {
         public bool TryValidateAnyDice(ICollection<int> dice)

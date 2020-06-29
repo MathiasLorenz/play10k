@@ -2,12 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Play10K.CLI
 {
-    public static class Congratulator
+    public static class Messager
     {
+        public static void StartGame()
+        {
+            Console.WriteLine("Welcome to playing 10k!");
+            Console.WriteLine();
+        }
+
         public static void EndGame(List<Player> players)
         {
             Console.WriteLine("Game is finised! Thanks for playing.");
