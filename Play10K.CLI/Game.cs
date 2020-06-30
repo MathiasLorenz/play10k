@@ -52,7 +52,6 @@ namespace Play10K.CLI
                     break;
                 }
                 
-                _gameDriver.ShowHand(player);
                 var collectedDice = _gameDriver.GetSpecifiedDice(player);
                 player.CollectDice(collectedDice);
 
