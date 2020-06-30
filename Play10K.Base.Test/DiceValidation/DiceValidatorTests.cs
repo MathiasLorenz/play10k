@@ -1,14 +1,15 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Play10K.Base.DiceValidation;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Play10K.Base.Test
+namespace Play10K.Base.HandValidation.Test
 {
     [TestClass]
-    public class HandValidatorTests
+    public class DiceValidatorTests
     {
-        private readonly HandValidator _handValidator = new HandValidator();
+        private readonly DiceValidator _diceValidator = new DiceValidator();
 
         [TestMethod]
         [DataRow(1)]
@@ -16,7 +17,7 @@ namespace Play10K.Base.Test
         public void TryValidateAnyDice_SingleValue_ReturnsTrue(int input)
         {
             var hand = new List<int> { input };
-            var result = _handValidator.TryValidateAnyDice(hand);
+            var result = _diceValidator.TryValidateAnyDice(hand);
             var expected = true;
 
             Assert.AreEqual(expected, result);
@@ -30,7 +31,7 @@ namespace Play10K.Base.Test
         public void TryValidateAnyDice_SingleValue_ReturnsFalse(int input)
         {
             var hand = new List<int> { input };
-            var result = _handValidator.TryValidateAnyDice(hand);
+            var result = _diceValidator.TryValidateAnyDice(hand);
             var expected = false;
 
             Assert.AreEqual(expected, result);
@@ -44,7 +45,7 @@ namespace Play10K.Base.Test
         public void TryValidateAnyDice_SingleValue_ThrowsException(int input)
         {
             var hand = new List<int> { input };
-            _handValidator.TryValidateAnyDice(hand);
+            _diceValidator.TryValidateAnyDice(hand);
         }
 
         [TestMethod]
@@ -55,7 +56,7 @@ namespace Play10K.Base.Test
         [DataRow(new int[] { 2, 4, 4, 4 })]
         public void TryValidateAnyDice_MultipleValues_ReturnsTrue(int[] input)
         {
-            var result = _handValidator.TryValidateAnyDice(input);
+            var result = _diceValidator.TryValidateAnyDice(input);
             var expected = true;
 
             Assert.AreEqual(expected, result);
@@ -67,7 +68,7 @@ namespace Play10K.Base.Test
         [DataRow(new int[] { 2, 3, 3, 4, 4, 6 })]
         public void TryValidateAnyDice_MultipleValues_ReturnsFalse(int[] input)
         {
-            var result = _handValidator.TryValidateAnyDice(input);
+            var result = _diceValidator.TryValidateAnyDice(input);
             var expected = false;
 
             Assert.AreEqual(expected, result);
@@ -81,7 +82,7 @@ namespace Play10K.Base.Test
         [DataRow(new int[] { 2, 8 })]
         public void TryValidateAnyDice_MultipleValues_ThrowsException(int[] input)
         {
-            _handValidator.TryValidateAnyDice(input);
+            _diceValidator.TryValidateAnyDice(input);
         }
 
         [TestMethod]
@@ -97,7 +98,7 @@ namespace Play10K.Base.Test
         public void TryValidateAnyDice_SingleValueWithCollected(int[] hand, int[]? diceCollection, bool expected)
         {
             var lastCollected = diceCollection != null ? new DiceCollection(diceCollection[0], diceCollection[1]) : null;
-            var result = _handValidator.TryValidateAnyDice(hand, lastCollected);
+            var result = _diceValidator.TryValidateAnyDice(hand, lastCollected);
 
             Assert.AreEqual(expected, result);
         }
@@ -120,7 +121,7 @@ namespace Play10K.Base.Test
         [DataRow(new int[] { 5, 5 })]
         public void TryValidateAllDice_SingleAndMultipleValuesNoCollected_ReturnsTrue(int[] input)
         {
-            var result = _handValidator.TryValidateAllDice(input);
+            var result = _diceValidator.TryValidateAllDice(input);
             var expected = true;
 
             Assert.AreEqual(expected, result);
@@ -144,7 +145,7 @@ namespace Play10K.Base.Test
         [DataRow(new int[] { 1, 1, 5, 3, 2, 1 })]
         public void TryValidateAllDice_SingleAndMultipleValuesNoCollected_ReturnsFalse(int[] input)
         {
-            var result = _handValidator.TryValidateAllDice(input);
+            var result = _diceValidator.TryValidateAllDice(input);
             var expected = false;
 
             Assert.AreEqual(expected, result);
@@ -157,7 +158,7 @@ namespace Play10K.Base.Test
         [DataRow(new int[] { 1, 8 })]
         public void TryValidateAllDice_SingleAndMultipleValuesNoCollected_ThrowsException(int[] input)
         {
-            _handValidator.TryValidateAllDice(input);
+            _diceValidator.TryValidateAllDice(input);
         }
 
         [TestMethod]
@@ -171,7 +172,7 @@ namespace Play10K.Base.Test
         public void TryValidateAllDice_SingleAndMultipleValuesWithCollected_ReturnsTrue(int[] input, int[]? diceCollection)
         {
             var lastCollected = diceCollection != null ? new DiceCollection(diceCollection[0], diceCollection[1]) : null;
-            var result = _handValidator.TryValidateAllDice(input, lastCollected);
+            var result = _diceValidator.TryValidateAllDice(input, lastCollected);
             var expected = true;
 
             Assert.AreEqual(expected, result);
@@ -186,7 +187,7 @@ namespace Play10K.Base.Test
         public void TryValidateAllDice_SingleAndMultipleValuesWithCollected_ReturnsFalse(int[] input, int[]? diceCollection)
         {
             var lastCollected = diceCollection != null ? new DiceCollection(diceCollection[0], diceCollection[1]) : null;
-            var result = _handValidator.TryValidateAllDice(input, lastCollected);
+            var result = _diceValidator.TryValidateAllDice(input, lastCollected);
             var expected = false;
 
             Assert.AreEqual(expected, result);

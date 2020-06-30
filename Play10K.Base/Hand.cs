@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Play10K.Base.DiceValidation;
+using System;
 using System.Collections.Generic;
 
 namespace Play10K.Base
@@ -6,7 +7,7 @@ namespace Play10K.Base
     internal class Hand
     {
         private readonly Random _rand = new Random();
-        private readonly HandValidator _handValidator = new HandValidator();
+        private readonly DiceValidator _diceValidator = new DiceValidator();
         private int _savedScore = 0;
         private CollectedDice _collectedDice = new CollectedDice();
         public List<int> Dice { get; private set; } = new List<int> { 0, 0, 0, 0, 0, 0 };
@@ -41,7 +42,7 @@ namespace Play10K.Base
         }
 
         public bool IsAnyCombinationValid()
-            => _handValidator.TryValidateAnyDice(Dice, _collectedDice.LastCollected);
+            => _diceValidator.TryValidateAnyDice(Dice, _collectedDice.LastCollected);
 
         public void Clear()
         {
@@ -67,6 +68,6 @@ namespace Play10K.Base
 
         // Verifies that the selected list of dice to collect is valid.
         internal bool VerifyDiceToCollect(ICollection<int> dice)
-            => _handValidator.TryValidateAllDice(dice, _collectedDice.LastCollected);
+            => _diceValidator.TryValidateAllDice(dice, _collectedDice.LastCollected);
     }
 }
