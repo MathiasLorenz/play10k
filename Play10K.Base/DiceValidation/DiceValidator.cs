@@ -44,7 +44,8 @@ namespace Play10K.Base.DiceValidation
             //}
 
             var diceCounter = dice.DictionaryCounter();
-            var successes = diceCounter.Select(x => _handValidatorInternal.TryValidateDiceCounter(x.Key, x.Value, lastCollected));
+            var successes = diceCounter
+                .Select(x => _handValidatorInternal.ValidateDiceCounter(x.Key, x.Value, lastCollected?.Value));
 
             return validateAll ? successes.All(x => x == true) : successes.Any(x => x == true);
         }
