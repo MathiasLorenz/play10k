@@ -25,7 +25,7 @@ namespace Play10K.CLI
             while (true)
             {
                 dice = _userInput.GetSpecifiedDice().ToList();
-                if (player.VerifyDiceToCollect(dice) == false)
+                while (player.VerifyDiceToCollect(dice) == false)
                 {
                     // Todo: Implement a way to tell which dice were wrong.
                     Console.WriteLine($"The specified dice were not valid. Try again :)");

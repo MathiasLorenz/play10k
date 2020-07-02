@@ -39,7 +39,7 @@ namespace Play10K.CLI
             {
                 Console.WriteLine($"Input dice to collect.");
                 Console.WriteLine($"Type them without spaces or anything, like 333 or 5.");
-                var input = Console.ReadLine();
+                var input = Console.ReadLine().Trim();
                 var dice = _userInputInternal.GetSpecifiedDiceInternal(input);
                 if (dice != null)
                 {
