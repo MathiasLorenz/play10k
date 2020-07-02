@@ -42,7 +42,7 @@ namespace Play10K.Base
         }
 
         public bool IsAnyCombinationValid()
-            => _diceValidator.TryValidateAnyDice(Dice, _collectedDice.LastCollected);
+            => _diceValidator.ValidateAnyDice(Dice, _collectedDice.LastCollected?.Value);
 
         public void Clear()
         {
@@ -67,7 +67,7 @@ namespace Play10K.Base
         }
 
         // Verifies that the selected list of dice to collect is valid.
-        internal bool VerifyDiceToCollect(ICollection<int> dice)
-            => _diceValidator.TryValidateAllDice(dice, _collectedDice.LastCollected);
+        internal bool VerifyDiceToCollect(ICollection<int> diceToVerify)
+            => _diceValidator.ValidateAllDice(Dice, diceToVerify, _collectedDice.LastCollected?.Value);
     }
 }

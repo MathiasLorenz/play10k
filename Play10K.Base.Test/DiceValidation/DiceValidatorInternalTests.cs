@@ -9,6 +9,8 @@ namespace Play10K.Base.Test.DiceValidation
     [TestClass]
     public class DiceValidatorInternalTests
     {
+        private readonly DiceValidatorInternal _diceValidatorInternal = new DiceValidatorInternal();
+
         [TestMethod]
         [DataRow(new int[] { 1, 1 })]
         [DataRow(new int[] { 1, 2 })]
@@ -18,7 +20,7 @@ namespace Play10K.Base.Test.DiceValidation
         [DataRow(new int[] { 1, 3, 6, 2 })]
         public void AreDiceContainedInHand_DiceAreContained_ReturnsTrue(int[] diceToDictionary)
         {
-            var diceValidatorInternal = new DiceValidatorInternal();
+            
             var handDice = new Dictionary<int, int>()
             {
                 [1] = 3,
@@ -27,7 +29,7 @@ namespace Play10K.Base.Test.DiceValidation
             };
             var dice = ArrayToDictionary(diceToDictionary);
 
-            var result = diceValidatorInternal.AreDiceContainedInHand(handDice, dice);
+            var result = _diceValidatorInternal.AreDiceContainedInHand(handDice, dice);
 
             result.ShouldBe(true);
         }
@@ -39,7 +41,6 @@ namespace Play10K.Base.Test.DiceValidation
         [DataRow(new int[] { 54, 1 })]
         public void AreDiceContainedInHand_DiceNotPresentInHand_ReturnsFalse(int[] diceToDictionary)
         {
-            var diceValidatorInternal = new DiceValidatorInternal();
             var handDice = new Dictionary<int, int>()
             {
                 [1] = 1,
@@ -48,7 +49,7 @@ namespace Play10K.Base.Test.DiceValidation
             };
             var dice = ArrayToDictionary(diceToDictionary);
 
-            var result = diceValidatorInternal.AreDiceContainedInHand(handDice, dice);
+            var result = _diceValidatorInternal.AreDiceContainedInHand(handDice, dice);
 
             result.ShouldBe(false);
         }
@@ -62,7 +63,6 @@ namespace Play10K.Base.Test.DiceValidation
         [DataRow(new int[] { 3, 20 })]
         public void AreDiceContainedInHand_DiceCountExceedsCountInHand_ReturnsFalse(int[] diceToDictionary)
         {
-            var diceValidatorInternal = new DiceValidatorInternal();
             var handDice = new Dictionary<int, int>()
             {
                 [1] = 3,
@@ -71,7 +71,7 @@ namespace Play10K.Base.Test.DiceValidation
             };
             var dice = ArrayToDictionary(diceToDictionary);
 
-            var result = diceValidatorInternal.AreDiceContainedInHand(handDice, dice);
+            var result = _diceValidatorInternal.AreDiceContainedInHand(handDice, dice);
 
             result.ShouldBeFalse();
         }
@@ -83,9 +83,8 @@ namespace Play10K.Base.Test.DiceValidation
         [DataRow(2, 65, null)]
         public void ValidateDiceCounter_CountOutsideValidRange_ThrowsException(int value, int count, int? lastCollectedValue)
         {
-            var diceValidatorInternal = new DiceValidatorInternal();
             Should.Throw<ArgumentException>(() => {
-                diceValidatorInternal.ValidateDiceCounter(value, count, lastCollectedValue);
+                _diceValidatorInternal.ValidateDiceCount(value, count, lastCollectedValue);
             });
         }
 
@@ -96,9 +95,8 @@ namespace Play10K.Base.Test.DiceValidation
         [DataRow(65, 3, null)]
         public void ValidateDiceCounter_ValueOutsideValidRange_ThrowsException(int value, int count, int? lastCollectedValue)
         {
-            var diceValidatorInternal = new DiceValidatorInternal();
             Should.Throw<ArgumentException>(() => {
-                diceValidatorInternal.ValidateDiceCounter(value, count, lastCollectedValue);
+                _diceValidatorInternal.ValidateDiceCount(value, count, lastCollectedValue);
             });
         }
 
@@ -115,8 +113,7 @@ namespace Play10K.Base.Test.DiceValidation
         [DataRow(1, 2, 1)]
         public void ValidateDiceCounter_VariousValidInputs_ReturnsTrue(int value, int count, int? lastCollectedValue)
         {
-            var diceValidatorInternal = new DiceValidatorInternal();
-            var result = diceValidatorInternal.ValidateDiceCounter(value, count, lastCollectedValue);
+            var result = _diceValidatorInternal.ValidateDiceCount(value, count, lastCollectedValue);
 
             result.ShouldBeTrue();
         }
@@ -128,8 +125,7 @@ namespace Play10K.Base.Test.DiceValidation
         [DataRow(6, 2, 1)]
         public void ValidateDiceCounter_VariousInvalidInputs_ReturnsFalse(int value, int count, int? lastCollectedValue)
         {
-            var diceValidatorInternal = new DiceValidatorInternal();
-            var result = diceValidatorInternal.ValidateDiceCounter(value, count, lastCollectedValue);
+            var result = _diceValidatorInternal.ValidateDiceCount(value, count, lastCollectedValue);
 
             result.ShouldBeFalse();
         }

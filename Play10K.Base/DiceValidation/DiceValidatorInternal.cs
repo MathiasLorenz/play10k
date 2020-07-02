@@ -23,7 +23,7 @@ namespace Play10K.Base.DiceValidation
             return true;
         }
 
-        public bool ValidateDiceCounter(int value, int count, int? lastCollectedValue)
+        public bool ValidateDiceCount(int value, int count, int? lastCollectedValue)
         {
             if (count <= 0 || count > 6)
             {

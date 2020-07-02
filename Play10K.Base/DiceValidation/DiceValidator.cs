@@ -12,40 +12,31 @@ namespace Play10K.Base.DiceValidation
     {
         private readonly DiceValidatorInternal _handValidatorInternal = new DiceValidatorInternal();
 
-        public bool TryValidateAnyDice(ICollection<int> dice)
+        public bool ValidateAnyDice(ICollection<int> handDice, int? lastCollectedValue = null)
         {
-            return Validate(dice, null, false);
+            var handCounter = handDice.DictionaryCounter();
+            return Validate(handCounter, lastCollectedValue, false);
         }
 
-        public bool TryValidateAnyDice(ICollection<int> dice, DiceCollection? lastCollected)
+        public bool ValidateAllDice(ICollection<int> handDice, ICollection<int> dice, int? lastCollectedValue = null)
         {
-            return Validate(dice, lastCollected, false);
-        }
-
-        public bool TryValidateAllDice(ICollection<int> dice)
-        {
-            return Validate(dice, null, true);
-        }
-
-        public bool TryValidateAllDice(ICollection<int> dice, DiceCollection? lastCollected)
-        {
-            return Validate(dice, lastCollected, true);
-        }
-
-        private bool Validate(ICollection<int> dice, DiceCollection? lastCollected, bool validateAll)
-        {
-            if (dice.Count == 0 || dice.Count > 6)
-            {
-                throw new ArgumentException("Overall dice count cannot be less than one or more than six.");
-            }
-            //if (_handValidatorInternal.AreDiceContainedInHand(handDice, dice) == false)
-            //{
-            //    return false;
-            //}
-
+            var handCounter = handDice.DictionaryCounter();
             var diceCounter = dice.DictionaryCounter();
+            if (_handValidatorInternal.AreDiceContainedInHand(handCounter, diceCounter) == false)
+            {
+                return false;
+            }
+            else
+            {
+                return Validate(diceCounter, lastCollectedValue, true);
+            }
+        }
+
+        // Public test?
+        private bool Validate(IDictionary<int, int> diceCounter, int? lastCollectedValue, bool validateAll)
+        {
             var successes = diceCounter
-                .Select(x => _handValidatorInternal.ValidateDiceCounter(x.Key, x.Value, lastCollected?.Value));
+                .Select(x => _handValidatorInternal.ValidateDiceCount(x.Key, x.Value, lastCollectedValue));
 
             return validateAll ? successes.All(x => x == true) : successes.Any(x => x == true);
         }
