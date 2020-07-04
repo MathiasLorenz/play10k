@@ -23,14 +23,16 @@ namespace Play10K.Base
             {
                 return;
             }
-            if (Dice.Count < 0)
+            else if (Dice.Count < 0)
             {
                 throw new InvalidOperationException("Negative amount of dice, this should not be possible.");
             }
-
-            Dice = new List<int> { 0, 0, 0, 0, 0, 0 };
-            _savedScore += _collectedDice.Score;
-            _collectedDice = new CollectedDice();
+            else
+            {
+                Dice = new List<int> { 0, 0, 0, 0, 0, 0 };
+                _savedScore += _collectedDice.Score;
+                _collectedDice = new CollectedDice();
+            }
         }
 
         public void Roll()

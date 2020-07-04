@@ -22,6 +22,7 @@ namespace Play10K.Base.DiceValidation
         {
             var handCounter = handDice.DictionaryCounter();
             var diceCounter = dice.DictionaryCounter();
+
             if (_handValidatorInternal.AreDiceContainedInHand(handCounter, diceCounter) == false)
             {
                 return false;
