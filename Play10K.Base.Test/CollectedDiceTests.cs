@@ -87,26 +87,5 @@ namespace Play10K.Base.Test
             var expectedDiceCollections = ListToDiceCollection(toExptecedDiceCollections);
             CollectionAssert.AreEqual(expectedDiceCollections, collectedDice.AllCollectedDice);
         }
-
-        // Todo: More tests and consider if this is the right approach.
-        [TestMethod]
-        [DataRow(new int[] { 1, 1, 1, 5 }, new int[] { 1, 3, 5, 1 })]
-        [DataRow(new int[] { 1, 1, 5 }, new int[] { 1, 1, 1, 1, 5, 1 })]
-        [DataRow(new int[] { 1, 6, 6, 6, 6 }, new int[] { 6, 4, 1, 1 })]
-        public void DictionaryToDiceCollection_CollectsCorrectly(int[] toDictionary, int[] toExpectedDiceCollections)
-        {
-            var collectedDice = new CollectedDice();
-            var dict = toDictionary.DictionaryCounter();
-            var expectedDiceCollections = ListToDiceCollection(toExpectedDiceCollections);
-
-            var actualDiceCollections = collectedDice.DictionaryToDiceCollection(dict);
-
-            // Usually we don't care about the order at this step (only later), but for some reason
-            // CollectionAssert.AreEquivalent doesn't work for me, so I need to order and use .AreEqual on the ordered sets.
-            expectedDiceCollections = expectedDiceCollections.OrderBy(x => x.Count).ToList();
-            actualDiceCollections = actualDiceCollections.OrderBy(x => x.Count).ToList();
-
-            CollectionAssert.AreEqual(expectedDiceCollections, actualDiceCollections);
-        }
     }
 }

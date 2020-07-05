@@ -9,6 +9,8 @@ namespace Play10K.Base
 {
     internal class CollectedDice
     {
+        private readonly DiceCollectionUtils _diceCollectionUtils = new DiceCollectionUtils();
+
         public List<DiceCollection> AllCollectedDice { get; private set; } = new List<DiceCollection>();
         public DiceCollection? LastCollected => AllCollectedDice.LastOrDefault();
         public int Score { get => AllCollectedDice.Sum(x => x.Score); }
@@ -17,7 +19,7 @@ namespace Play10K.Base
         public void Collect(ICollection<int> dice)
         {
             // Doing dice -> DictionaryCounter -> DiceCollection could skip one step.
-            var diceCollection = DictionaryToDiceCollection(dice.DictionaryCounter());
+            var diceCollection = _diceCollectionUtils.DictionaryToDiceCollections(dice.DictionaryCounter());
 
             if (LastCollected != null)
             {
@@ -37,31 +39,6 @@ namespace Play10K.Base
             // illegal situation.
             diceCollection = diceCollection.OrderByDescending(x => x.Count).ToList();
             AllCollectedDice.AddRange(diceCollection);
-        }
-
-        // Todo: Factor out and make private here.
-        public List<DiceCollection> DictionaryToDiceCollection(Dictionary<int, int> dict)
-        {
-            if (dict.Count == 0)
-            {
-                throw new ArgumentException("Cannot parse an empty dictionary of value and count.");
-            }
-
-            var diceCollection = new List<DiceCollection>();
-            foreach (var (value, count) in dict)
-            {
-                if (count == 2)
-                {
-                    diceCollection.Add(new DiceCollection(value, 1));
-                    diceCollection.Add(new DiceCollection(value, 1));
-                }
-                else
-                {
-                    diceCollection.Add(new DiceCollection(value, count));
-                }
-            }
-
-            return diceCollection;
         }
     }
 }

@@ -4,27 +4,32 @@ using System.Text;
 
 namespace Play10K.Base
 {
-    internal static class ScoreCalculator
+    internal class ScoreCalculator
     {
-        public static int CalculateScore(DiceCollection input)
+        public int CalculateScore(DiceCollection input)
         {
-            return input.Count switch
+            return CalculateScore(input.Count, input.Value);
+        }
+
+        private int CalculateScore(int count, int value)
+        {
+            return count switch
             {
-                1 => input.Value switch
+                1 => value switch
                 {
                     1 => 100,
                     5 => 50,
                     _ => throw new ArgumentException("Cannot calculate score for this DiceCollection"),
                 },
-                3 => ThreeDiceCombinationScores(input.Value),
-                4 => 2*ThreeDiceCombinationScores(input.Value),
-                5 => 4*ThreeDiceCombinationScores(input.Value),
-                6 => 8*ThreeDiceCombinationScores(input.Value),
+                3 => ThreeDiceCombinationScores(value),
+                4 => 2 * ThreeDiceCombinationScores(value),
+                5 => 4 * ThreeDiceCombinationScores(value),
+                6 => 8 * ThreeDiceCombinationScores(value),
                 _ => throw new ArgumentException("Cannot calculate score for this DiceCollection"),
             };
         }
 
-        private static int ThreeDiceCombinationScores(int value)
+        private int ThreeDiceCombinationScores(int value)
         {
             return value switch
             {

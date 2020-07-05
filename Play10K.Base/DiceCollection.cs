@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
 
 namespace Play10K.Base
 {
     internal class DiceCollection
     {
+        private readonly ScoreCalculator _scoreCalculator = new ScoreCalculator();
         public int Value { get; } = 0;
         public int Count { get; private set; } = 0;
-        public int Score { get => ScoreCalculator.CalculateScore(this); }
+        public int Score { get => _scoreCalculator.CalculateScore(this); }
 
         public DiceCollection(int value, int count)
         {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -20,23 +21,12 @@ namespace Play10K.Base.Test
         [DataRow(new [] { 1, 6 }, 8000)]
         public void CalculateScore_Calculate_ReturnsCorrect(int[] hand, int expected)
         {
+            var scoreCalculator = new ScoreCalculator();
             var diceCollection = new DiceCollection(hand[0], hand[1]);
-            var result = ScoreCalculator.CalculateScore(diceCollection);
 
-            Assert.AreEqual(expected, result);
-        }
+            var result = scoreCalculator.CalculateScore(diceCollection);
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        [DataRow(new[] { 1, 2 })]
-        [DataRow(new[] { 0, 1 })]
-        [DataRow(new[] { 7, 3 })]
-        [DataRow(new[] { 2, 7 })]
-        [DataRow(new[] { 5, 0 })]
-        public void CalculateScore_Calculate_ThrowsException(int[] hand)
-        {
-            var diceCollection = new DiceCollection(hand[0], hand[1]);
-            ScoreCalculator.CalculateScore(diceCollection);
+            result.ShouldBe(expected);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Play10K.CLI
 
         public char ContinueOrEndTurn(Player player)
         {
-            Console.WriteLine($"This turn you have collected {player.Score} points.");
+            Console.WriteLine($"This turn you have collected {player.TurnScore} points.");
             Console.WriteLine($"You have {player.Dice.Count} dice left.");
             Console.WriteLine($"Do you want to continue your turn by rolling again, or do you want to stop now and collect the points?");
             Console.WriteLine($"For continue/end, enter: c/e");
@@ -35,7 +35,7 @@ namespace Play10K.CLI
                 // Ask the user whether or not to keep this choice.
                 // Todo: Fix this write out to the user
                 Console.WriteLine($"You have put XXXX aside right now.");
-                Console.WriteLine($"Together with the already collected, this amounts to YYYY points.");
+                Console.WriteLine($"Together with the already collected, this amounts to {player.TurnScoreWithDice(dice)} points.");
                 Console.WriteLine($"Would you like to save these dice and move on with your turn? Note that this cannot be undone.");
                 Console.WriteLine($"Save these dice or cancel and choose again? Enter s/c:");
                 var response = _userInput.GetCharResponse(new List<char> { 's', 'c' });
@@ -52,12 +52,15 @@ namespace Play10K.CLI
         {
             Console.WriteLine($"This turn you have collected {player.TurnScore} points.");
             Console.WriteLine($"Your dice right now are:");
-            var s = "";
-            foreach (var die in player.Dice)
+            var sortedList = new List<int>(player.Dice);
+            sortedList.Sort();
+
+            var output = "";
+            foreach (var die in sortedList)
             {
-                s += $" {die}";
+                output += $" {die}";
             }
-            Console.WriteLine(s);
+            Console.WriteLine(output);
         }
 
         // Think pure messages should be in their own class.

@@ -32,7 +32,8 @@ namespace Play10K.CLI
 
         // Main logic, here the game is actually played.
         // Todo: Move this out. Maybe create a CLIPlayer class that implements this TakeTurn and has a base Player?
-        // Seems like a bit of an anti-pattern to have GameDriver that takes in a Player in all methods....
+        // todo: Also seems like a bit of an anti-pattern to have GameDriver that takes in a Player in all methods....
+        // Todo: Make some more vertical spacing in the output. Also make the user input an Enter to start turn or something?
         private void TakeTurn(Player player)
         {
             _gameDriver.MessageStartOfTurn(player);
@@ -64,6 +65,7 @@ namespace Play10K.CLI
                 }
             }
 
+            // Todo: EndOfTurn message bliver vist forkert fordi scoren opdateres inden i EndTurn
             player.EndTurn(addToScore);
             _gameDriver.MessageEndOfTurn(player);
         }
