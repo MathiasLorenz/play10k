@@ -51,14 +51,16 @@ namespace Play10K.CLI
                     addToScore = false;
                     break;
                 }
-                
-                var collectedDice = _gameDriver.GetSpecifiedDice(player);
-                player.CollectDice(collectedDice);
-
-                var response = _gameDriver.ContinueOrEndTurn(player);
-                if (response == 'e')
+                else
                 {
-                    break;
+                    var collectedDice = _gameDriver.GetSpecifiedDice(player);
+                    player.CollectDice(collectedDice);
+
+                    var response = _gameDriver.ContinueOrEndTurn(player);
+                    if (response == 'e')
+                    {
+                        break;
+                    }
                 }
             }
 

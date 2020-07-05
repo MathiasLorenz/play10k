@@ -10,6 +10,8 @@ namespace Play10K.Base
         private readonly DiceValidator _diceValidator = new DiceValidator();
         private int _savedScore = 0;
         private CollectedDice _collectedDice = new CollectedDice();
+        // The private setter makes it impossible to mock this and test properly :(
+        // I feel like this should be organized in a different way in order to test more easily.
         public List<int> Dice { get; private set; } = new List<int> { 0, 0, 0, 0, 0, 0 };
         public int Score => _savedScore + _collectedDice.Score;
 
