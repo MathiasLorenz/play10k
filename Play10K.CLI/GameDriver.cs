@@ -9,15 +9,6 @@ namespace Play10K.CLI
     {
         private readonly UserInput _userInput = new UserInput();
 
-        public char ContinueOrEndTurn(Player player)
-        {
-            Console.WriteLine($"This turn you have collected {player.TurnScore} points.");
-            Console.WriteLine($"You have {player.Dice.Count} dice left.");
-            Console.WriteLine($"Do you want to continue your turn by rolling again, or do you want to stop now and collect the points?");
-            Console.WriteLine($"For continue/end, enter: c/e");
-            return _userInput.GetCharResponse(new List<char> { 'c', 'e' });
-        }
-
         // Todo: Split into two functions - one for getting dice input and one asking to keep or not.
         public List<int> GetSpecifiedDice(Player player)
         {
@@ -71,14 +62,31 @@ namespace Play10K.CLI
 
         public void MessageStartOfTurn(Player player)
         {
+            Console.WriteLine();
             Console.WriteLine($"It is now your turn, {player.Name}.");
             Console.WriteLine($"Your score is currently: {player.Score}");
         }
 
-        public void MessageEndOfTurn(Player player)
+        public void MessageEndOfTurn(Player player, int turnScore)
         {
             Console.WriteLine($"Your turn is now over, {player.Name}.");
-            Console.WriteLine($"You collected {player.TurnScore} points this turn and now have {player.Score} points in total.");
+            Console.WriteLine($"You collected {turnScore} points this turn and now have {player.Score} points in total.");
+        }
+
+        public char ContinueOrEndTurn(Player player)
+        {
+            Console.WriteLine($"This turn you have collected {player.TurnScore} points.");
+            Console.WriteLine($"You have {player.Dice.Count} dice left.");
+            Console.WriteLine($"Do you want to continue your turn by rolling again, or do you want to stop now and collect the points?");
+            Console.WriteLine($"For roll/end, enter: r/e");
+            return _userInput.GetCharResponse(new List<char> { 'r', 'e' });
+        }
+
+        public void WaitForAnyKeyInput()
+        {
+            Console.WriteLine("Press any key to start the next players turn...");
+            _userInput.GetAnyInput();
+            Console.WriteLine();
         }
     }
 }

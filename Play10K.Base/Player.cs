@@ -36,13 +36,15 @@ namespace Play10K.Base
             _hand = new Hand();
         }
 
-        public void EndTurn(bool AddTurnScore)
+        public int EndTurn(bool AddTurnScore)
         {
             if (AddTurnScore)
             {
                 Score += TurnScore;
             }
             _hand.Clear();
+
+            return Score;
         }
 
         public void ReconcileHand()

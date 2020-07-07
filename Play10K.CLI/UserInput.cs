@@ -29,6 +29,11 @@ namespace Play10K.CLI
             }
         }
 
+        public void GetAnyInput()
+        {
+            var _ = Console.ReadKey();
+        }
+
         /// <summary>
         /// Collects the dice from the user to be saved in this roll.
         /// </summary>

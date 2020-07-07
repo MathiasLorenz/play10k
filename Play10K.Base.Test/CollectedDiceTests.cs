@@ -36,7 +36,11 @@ namespace Play10K.Base.Test
         [DataRow(new int[] { 1, 1, 1 }, new int[] { 5, 1 }, new int[] { 1, 4, 5, 1 })]
         [DataRow(new int[] { 1, 1, 1 }, new int[] { 1, 5 }, new int[] { 1, 4, 5, 1 })]
         [DataRow(new int[] { 4, 4, 4 }, new int[] { 5, 4 }, new int[] { 4, 4, 5, 1 })]
+        [DataRow(new int[] { 6, 6, 6 }, new int[] { 6 }, new int[] { 6, 4 })]
         [DataRow(new int[] { 6, 6, 6, 6 }, new int[] { 6 }, new int[] { 6, 5 })]
+        [DataRow(new int[] { 6, 6, 6, 6 }, new int[] { 6, 6 }, new int[] { 6, 6 })]
+        [DataRow(new int[] { 6, 6, 6, 6 }, new int[] { 6, 5 }, new int[] { 6, 5, 5, 1 })]
+        [DataRow(new int[] { 6, 6, 6, 6, 6 }, new int[] { 6 }, new int[] { 6, 6 })]
         public void Collect_CollectTwoHands_CorrectlyAddsToLastCollected(int[] firstCollect, int[] thenCollect, int[] toExpectedDiceCollections)
         {
             var collectedDice = new CollectedDice();

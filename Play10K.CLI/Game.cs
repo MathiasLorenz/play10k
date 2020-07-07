@@ -65,9 +65,10 @@ namespace Play10K.CLI
                 }
             }
 
-            // Todo: EndOfTurn message bliver vist forkert fordi scoren opdateres inden i EndTurn
-            player.EndTurn(addToScore);
-            _gameDriver.MessageEndOfTurn(player);
+            var turnScore = player.EndTurn(addToScore);
+            _gameDriver.MessageEndOfTurn(player, turnScore);
+
+            _gameDriver.WaitForAnyKeyInput();
         }
     }
 }
