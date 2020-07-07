@@ -15,7 +15,7 @@ namespace Play10K.Base
         public DiceCollection? LastCollected => AllCollectedDice.LastOrDefault();
         public int Score { get => AllCollectedDice.Sum(x => x.Score); }
 
-        // Todo: Proper unit tests!
+        // This method depends on the input to already be validated. Maybe shouldn't be like that.
         public void Collect(ICollection<int> dice)
         {
             // Doing dice -> DictionaryCounter -> DiceCollection could skip one step.
