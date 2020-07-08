@@ -16,6 +16,8 @@ namespace Play10K.CLI
 
         public void Play()
         {
+            _gameDriver.ShowPlayerOrder(Players);
+
             bool isLastRound = false;
             while (isLastRound == false)
             {

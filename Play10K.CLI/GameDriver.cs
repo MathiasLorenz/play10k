@@ -39,6 +39,13 @@ namespace Play10K.CLI
             return dice;
         }
 
+        internal void ShowPlayerOrder(List<Player> players)
+        {
+            Console.WriteLine();
+            Console.WriteLine("The order of players has been shuffled. The order is:");
+            Console.WriteLine(string.Join(", ", players.Select(x => x.Name)));
+        }
+
         public void ShowHand(Player player)
         {
             Console.WriteLine();
@@ -83,6 +90,7 @@ namespace Play10K.CLI
 
         public void WaitForAnyKeyInput()
         {
+            Console.WriteLine();
             Console.WriteLine("Press any key to start the next players turn...");
             _userInput.GetAnyInput();
             Console.WriteLine();

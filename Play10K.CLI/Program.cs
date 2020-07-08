@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Play10K.CLI
 {
@@ -7,9 +8,11 @@ namespace Play10K.CLI
         static void Main(string[] args)
         {
             Messager.StartGame();
-
+            
+            // Create and shuffle players.
             var playerCreator = new PlayerCreator();
-            var players = playerCreator.Create();
+            var players = playerCreator.Create().OrderBy(x => Guid.NewGuid()).ToList();
+
             var game = new Game(players);
 
             game.Play();
