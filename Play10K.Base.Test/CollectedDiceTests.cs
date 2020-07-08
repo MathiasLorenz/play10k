@@ -59,6 +59,34 @@ namespace Play10K.Base.Test
             CollectionAssert.AreEqual(expectedDiceCollections, collectedDice.AllCollectedDice);
         }
 
+        [TestMethod]
+        [DataRow(new int[] { 1, 1, 1 })]
+        [DataRow(new int[] { 5 })]
+        [DataRow(new int[] { 6, 6, 6 })]
+        public void Clone_SingleHand_CollectedDiceAreEqual(int[] toCollect)
+        {
+            var collectedDice = new CollectedDice();
+            collectedDice.Collect(toCollect);
+
+            var clone = (CollectedDice)collectedDice.Clone();
+
+            CollectionAssert.AreEqual(collectedDice.AllCollectedDice, clone?.AllCollectedDice);
+        }
+
+        [TestMethod]
+        [DataRow(new int[] { 1, 1, 1 }, new int[] { 1 })]
+        [DataRow(new int[] { 6, 6, 6 }, new int[] { 1, 6 })]
+        public void Clone_MultipleHands_CollectedDiceAreEqual(int[] firstCollect, int[] thenCollect)
+        {
+            var collectedDice = new CollectedDice();
+            collectedDice.Collect(firstCollect);
+            collectedDice.Collect(thenCollect);
+
+            var clone = (CollectedDice)collectedDice.Clone();
+
+            CollectionAssert.AreEqual(collectedDice.AllCollectedDice, clone.AllCollectedDice);
+        }
+
         private List<DiceCollection> ListToDiceCollection(int[] list)
         {
             Assert.IsTrue(list.Length % 2 == 0);

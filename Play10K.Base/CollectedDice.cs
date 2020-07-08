@@ -7,11 +7,27 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("Play10K.Base.Test")]
 namespace Play10K.Base
 {
-    internal class CollectedDice
+    internal class CollectedDice : ICloneable
     {
         public List<DiceCollection> AllCollectedDice { get; private set; } = new List<DiceCollection>();
         public DiceCollection? LastCollected => AllCollectedDice.LastOrDefault();
         public int Score { get => AllCollectedDice.Sum(x => x.Score); }
+
+        public object Clone()
+        {
+            var clone = new CollectedDice
+            {
+                AllCollectedDice = new List<DiceCollection>()
+            };
+
+            // The elements in AllCollectedDice are ref types, thus I need to create new instances.
+            foreach (var diceCollection in AllCollectedDice)
+            {
+                clone.AllCollectedDice.Add(new DiceCollection(diceCollection.Value, diceCollection.Count));
+            }
+
+            return clone;
+        }
 
         // This method depends on the input to already be validated. Maybe shouldn't be like that.
         public void Collect(ICollection<int> dice)

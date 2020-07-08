@@ -70,8 +70,15 @@ namespace Play10K.Base
             }
         }
 
-        // Verifies that the selected list of dice to collect is valid.
-        internal bool VerifyDiceToCollect(ICollection<int> diceToVerify)
+        public bool VerifyDiceToCollect(ICollection<int> diceToVerify)
             => _diceValidator.ValidateAllDice(Dice, diceToVerify, _collectedDice.LastCollected?.Value);
+
+        public int ScoreWithTempDice(ICollection<int> dice)
+        {
+            var tempCollectedDice = (CollectedDice)_collectedDice.Clone();
+            tempCollectedDice.Collect(dice);
+
+            return _savedScore + tempCollectedDice.Score;
+        }
     }
 }

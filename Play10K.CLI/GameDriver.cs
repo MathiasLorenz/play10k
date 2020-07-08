@@ -26,7 +26,7 @@ namespace Play10K.CLI
                 // Ask the user whether or not to keep this choice.
                 // Todo: Fix this write out to the user
                 Console.WriteLine($"You have put XXXX aside right now.");
-                Console.WriteLine($"Together with the already collected, this amounts to {player.TurnScoreWithDice(dice)} points.");
+                Console.WriteLine($"Together with the already collected, this amounts to {player.TurnScoreWithTempDice(dice)} points.");
                 Console.WriteLine($"Would you like to save these dice and move on with your turn? Note that this cannot be undone.");
                 Console.WriteLine($"Save these dice or cancel and choose again? Enter s/c:");
                 var response = _userInput.GetCharResponse(new List<char> { 's', 'c' });
@@ -41,22 +41,19 @@ namespace Play10K.CLI
 
         public void ShowHand(Player player)
         {
+            Console.WriteLine();
             Console.WriteLine($"This turn you have collected {player.TurnScore} points.");
             Console.WriteLine($"Your dice right now are:");
             var sortedList = new List<int>(player.Dice);
             sortedList.Sort();
 
-            var output = "";
-            foreach (var die in sortedList)
-            {
-                output += $" {die}";
-            }
-            Console.WriteLine(output);
+            Console.WriteLine(string.Join(" ", sortedList));
         }
 
         // Think pure messages should be in their own class.
         public void MessageNoValidDice()
         {
+            Console.WriteLine();
             Console.WriteLine("Unfortunately with your roll you cannot do anything. Your turn is up!");
         }
 
@@ -69,12 +66,14 @@ namespace Play10K.CLI
 
         public void MessageEndOfTurn(Player player, int turnScore)
         {
+            Console.WriteLine();
             Console.WriteLine($"Your turn is now over, {player.Name}.");
-            Console.WriteLine($"You collected {turnScore} points this turn and now have {player.Score} points in total.");
+            Console.WriteLine($"You collected {turnScore} points this turn and have {player.Score} points in total.");
         }
 
         public char ContinueOrEndTurn(Player player)
         {
+            Console.WriteLine();
             Console.WriteLine($"This turn you have collected {player.TurnScore} points.");
             Console.WriteLine($"You have {player.Dice.Count} dice left.");
             Console.WriteLine($"Do you want to continue your turn by rolling again, or do you want to stop now and collect the points?");

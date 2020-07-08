@@ -14,15 +14,6 @@ namespace Play10K.Base
         private Hand _hand = new Hand();
 
         public int TurnScore => _hand.Score;
-        public int TurnScoreWithDice(ICollection<int> dice)
-        {
-            // Todo: This actually is just a Hand object with specified dice... Could refactor hand to take in dice,
-            // both to accommodate this scenario as well as easier unit testing?
-            var collectedDice = new CollectedDice();
-            collectedDice.Collect(dice);
-
-            return TurnScore + collectedDice.Score;
-        }
 
         public List<int> Dice => _hand.Dice;
 
@@ -42,9 +33,10 @@ namespace Play10K.Base
             {
                 Score += TurnScore;
             }
+            var turnScore = TurnScore;
             _hand.Clear();
 
-            return Score;
+            return AddTurnScore ? turnScore : 0;
         }
 
         public void ReconcileHand()
@@ -64,6 +56,11 @@ namespace Play10K.Base
         {
             _hand.SaveDiceToCollected(dice);
             _hand.RemoveDiceFromHand(dice);
+        }
+
+        public int TurnScoreWithTempDice(ICollection<int> dice)
+        {
+            return _hand.ScoreWithTempDice(dice);
         }
     }
 }
