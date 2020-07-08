@@ -9,8 +9,8 @@ namespace Play10K.Base.CollectionExtensions
     public static class IEnumerableExtensions
     {
         /// <summary>
-        ///  Mimics collections.Counter from Python.
         ///  Returns a dictionary of all distinct values from source together with a counter of how many times it is present in the input.
+        ///  This mimics collections.Counter from Python.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
