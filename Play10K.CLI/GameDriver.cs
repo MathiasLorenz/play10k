@@ -39,6 +39,16 @@ namespace Play10K.CLI
             return dice;
         }
 
+        internal void ShowScoreAfterRound(List<Player> players)
+        {
+            Console.WriteLine();
+            Console.WriteLine("The round is over. The scores (in order) are:");
+            foreach (var player in players.OrderByDescending(x => x.Score))
+            {
+                Console.WriteLine($"{player.Name} with score: {player.Score}.");
+            }
+        }
+
         internal void ShowPlayerOrder(List<Player> players)
         {
             Console.WriteLine();
