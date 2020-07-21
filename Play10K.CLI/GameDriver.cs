@@ -37,6 +37,13 @@ namespace Play10K.CLI
             return dice;
         }
 
+        internal void MessageLastRound(Player player)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"The player {player.Name} as surpassed 10000 points with {player.Score}!");
+            Console.WriteLine($"The remaining players can play their turn. After this the game is over.");
+        }
+
         internal void ShowScoreAfterRound(List<Player> players)
         {
             Console.WriteLine();

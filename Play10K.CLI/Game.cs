@@ -27,7 +27,7 @@ namespace Play10K.CLI
                     if (player.Score >= 10000)
                     {
                         isLastRound = true;
-                        // Todo: Write out a message that this is the last turn!
+                        _gameDriver.MessageLastRound(player);
                     }
                 }
 
