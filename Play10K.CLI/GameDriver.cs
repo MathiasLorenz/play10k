@@ -24,8 +24,6 @@ namespace Play10K.CLI
                 }
 
                 // Ask the user whether or not to keep this choice.
-                // Todo: Fix this write out to the user
-                Console.WriteLine($"You have put XXXX aside right now.");
                 Console.WriteLine($"Together with the already collected, this amounts to {player.TurnScoreWithTempDice(dice)} points.");
                 Console.WriteLine($"Would you like to save these dice and move on with your turn? Note that this cannot be undone.");
                 Console.WriteLine($"Save these dice or cancel and choose again? Enter s/c:");
